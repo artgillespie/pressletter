@@ -8,6 +8,12 @@
 
 #import "ALGScreenshotReader.h"
 
+typedef enum {
+    ALGNonRetina = 0,
+    ALGRetina,
+    ALGiPhone5,
+} ALGDimensions;
+
 @implementation ALGScreenshotReader {
     __strong UIImage *_image;
 }
@@ -51,11 +57,16 @@
             unsigned char g = *rawPtr++;
             unsigned char b = *rawPtr++;
             __unused unsigned char a = *rawPtr++;
-            if (r <= 50 && g <= 50 && b <= 50) {
+            if (r <= 52 && g <= 52 && b <= 52) {
                 *threshPtr = 0;
             }
             threshPtr++;
         }
+    }
+
+    NSError *error = nil;
+    if(NO == [self writeGrayscaleBytes:thresholdData size:CGSizeMake(width, height) toPath:@"/Users/artgillespie/Desktop/Pressletter.png" error:&error]) {
+        NSAssert(NO, @"Couldn't write grayscale image: %@", error);
     }
 
     free(rawData);
@@ -65,6 +76,53 @@
 
 - (ALGScreenshotReaderTile *)tileAtRow:(NSInteger)row column:(NSInteger)column {
     return nil;
+}
+
+#pragma mark - Private Debugging Methods
+
+- (UIImage *)grayscaleImageForBytes:(unsigned char *)buf size:(CGSize)size error:(NSError **)error {
+    NSParameterAssert(nil != buf);
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL,
+                                                              buf,
+                                                              size.width * size.height,
+                                                              NULL);
+    if (nil == provider) {
+        if (nil != *error) {
+            *error = [NSError errorWithDomain:@"ALGErrorDomain" code:-255 userInfo:@{NSLocalizedDescriptionKey : @"Couldn't create data provider"}];
+        }
+        return nil;
+    }
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
+    CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
+    CGImageRef imageRef = CGImageCreate(size.width,
+                                        size.height,
+                                        8,
+                                        8,
+                                        size.width, colorSpace,
+                                        bitmapInfo,
+                                        provider, NULL, NO, renderingIntent);
+    if (nil == imageRef) {
+        if (nil != *error) {
+            *error = [NSError errorWithDomain:@"ALGErrorDomain" code:-255 userInfo:@{NSLocalizedDescriptionKey : @"Couldn't create CGImage"}];
+        }
+        return nil;
+    }
+    return [UIImage imageWithCGImage:imageRef];
+}
+
+- (BOOL)writeGrayscaleBytes:(unsigned char *)buf size:(CGSize)size toPath:(NSString *)path error:(NSError **)error {
+    NSParameterAssert(nil != buf);
+    UIImage *grayscaleImage = [self grayscaleImageForBytes:buf size:size error:error];
+    if (nil == grayscaleImage) {
+        return NO;
+    }
+    NSData *data = UIImagePNGRepresentation(grayscaleImage);
+    return [data writeToFile:path options:NSDataWritingAtomic error:error];
+}
+
+- (UIImage *)createImageForAlphabet {
+    
 }
 
 @end
