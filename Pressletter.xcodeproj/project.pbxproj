@@ -32,6 +32,9 @@
 		C8D8630A1643C61F001B5668 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BE1643BDD7001B5668 /* CoreGraphics.framework */; };
 		C8D8630D1644261E001B5668 /* ALGImageUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D8630C1644261E001B5668 /* ALGImageUtilities.m */; };
 		C8D8630E1644261E001B5668 /* ALGImageUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D8630C1644261E001B5668 /* ALGImageUtilities.m */; };
+		C8D86313164445F6001B5668 /* iPhone_5_1.png in Resources */ = {isa = PBXBuildFile; fileRef = C8D86310164445F6001B5668 /* iPhone_5_1.png */; };
+		C8D86314164445F6001B5668 /* iPhone_5_2.png in Resources */ = {isa = PBXBuildFile; fileRef = C8D86311164445F6001B5668 /* iPhone_5_2.png */; };
+		C8D86315164445F6001B5668 /* iPhone_5_2.png in Resources */ = {isa = PBXBuildFile; fileRef = C8D86311164445F6001B5668 /* iPhone_5_2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +78,8 @@
 		C8D863071643C059001B5668 /* ALGScreenshotReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALGScreenshotReader.m; sourceTree = "<group>"; };
 		C8D8630B1644261E001B5668 /* ALGImageUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALGImageUtilities.h; sourceTree = "<group>"; };
 		C8D8630C1644261E001B5668 /* ALGImageUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALGImageUtilities.m; sourceTree = "<group>"; };
+		C8D86310164445F6001B5668 /* iPhone_5_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_5_1.png; sourceTree = "<group>"; };
+		C8D86311164445F6001B5668 /* iPhone_5_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_5_2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +191,8 @@
 		C8D862F51643BE7B001B5668 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C8D86310164445F6001B5668 /* iPhone_5_1.png */,
+				C8D86311164445F6001B5668 /* iPhone_5_2.png */,
 				C8D862FE1643BF0B001B5668 /* IMG_1384.PNG */,
 				C8D862FF1643BF0B001B5668 /* IMG_1385.PNG */,
 				C8D863001643BF0B001B5668 /* IMG_1386.PNG */,
@@ -271,6 +278,7 @@
 				C8D862CF1643BDD7001B5668 /* Default@2x.png in Resources */,
 				C8D862D11643BDD7001B5668 /* Default-568h@2x.png in Resources */,
 				C8D862D71643BDD7001B5668 /* ALGViewController.xib in Resources */,
+				C8D86314164445F6001B5668 /* iPhone_5_2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +291,8 @@
 				C8D863031643BF0B001B5668 /* IMG_1385.PNG in Resources */,
 				C8D863041643BF0B001B5668 /* IMG_1386.PNG in Resources */,
 				C8D863051643BF0B001B5668 /* MuseoSansRounded-700.otf in Resources */,
+				C8D86313164445F6001B5668 /* iPhone_5_1.png in Resources */,
+				C8D86315164445F6001B5668 /* iPhone_5_2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,6 +10,8 @@
 
 @interface ALGImageUtilities : NSObject
 
-+ (UIImage *)alphabetSheet;
++ (UIImage *)alphabetSheet:(BOOL)debug;
++ (unsigned char *)thresholdDataForImage:(UIImage *)image;
++ (UIImage *)grayscaleImageForBytes:(unsigned char *)buf size:(CGSize)size error:(NSError **)error;
 
 @end

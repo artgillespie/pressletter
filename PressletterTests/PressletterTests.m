@@ -43,7 +43,7 @@
 }
 
 - (void)testAlphaSheet {
-    UIImage *alphaSheet = [ALGImageUtilities alphabetSheet];
+    UIImage *alphaSheet = [ALGImageUtilities alphabetSheet:YES];
     NSData *pngData = UIImagePNGRepresentation(alphaSheet);
     NSError *error = nil;
     if(NO == [pngData writeToFile:@"/Users/artgillespie/Desktop/alphaSheet.png" options:NSDataWritingAtomic error:&error]) {
@@ -52,7 +52,7 @@
 }
 
 - (void)testReaderWith1384 {
-    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"IMG_1384" ofType:@"PNG"];
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"IMG_1386" ofType:@"PNG"];
     STAssertNotNil(imagePath, @"Expected Image Path");
     UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
     STAssertNotNil(image, @"Expected image");
@@ -68,10 +68,60 @@
         @[@"L", @"U", @"Z", @"S", @"K"],
         @[@"M", @"F", @"M", @"X", @"K"],
     ];
-    for (int ii = 0; ii < 5; ++ii) {
-        for (int jj = 0; jj < 5; ++jj) {
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
             ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
-            // STAssertEquals(expected[ii][jj], tile.letter, @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+        }
+    }
+}
+
+- (void)testReaderWithiPhone5_1 {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPhone_5_1" ofType:@"png"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"P", @"R", @"I", @"Z", @"S"],
+    @[@"U", @"T", @"V", @"Z", @"R"],
+    @[@"A", @"T", @"S", @"R", @"S"],
+    @[@"E", @"R", @"D", @"N", @"F"],
+    @[@"G", @"O", @"W", @"C", @"S"],
+    ];
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+        }
+    }
+}
+
+- (void)testReaderWithiPhone5_2 {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPhone_5_2" ofType:@"png"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"P", @"N", @"S", @"E", @"N"],
+    @[@"A", @"H", @"M", @"U", @"O"],
+    @[@"R", @"T", @"F", @"H", @"I"],
+    @[@"G", @"C", @"S", @"C", @"W"],
+    @[@"P", @"D", @"O", @"E", @"A"],
+    ];
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
         }
     }
 }
