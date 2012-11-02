@@ -30,6 +30,8 @@
 		C8D863081643C059001B5668 /* ALGScreenshotReader.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D863071643C059001B5668 /* ALGScreenshotReader.m */; };
 		C8D863091643C059001B5668 /* ALGScreenshotReader.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D863071643C059001B5668 /* ALGScreenshotReader.m */; };
 		C8D8630A1643C61F001B5668 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BE1643BDD7001B5668 /* CoreGraphics.framework */; };
+		C8D8630D1644261E001B5668 /* ALGImageUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D8630C1644261E001B5668 /* ALGImageUtilities.m */; };
+		C8D8630E1644261E001B5668 /* ALGImageUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D8630C1644261E001B5668 /* ALGImageUtilities.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +73,8 @@
 		C8D863011643BF0B001B5668 /* MuseoSansRounded-700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSansRounded-700.otf"; sourceTree = "<group>"; };
 		C8D863061643C059001B5668 /* ALGScreenshotReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALGScreenshotReader.h; sourceTree = "<group>"; };
 		C8D863071643C059001B5668 /* ALGScreenshotReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALGScreenshotReader.m; sourceTree = "<group>"; };
+		C8D8630B1644261E001B5668 /* ALGImageUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALGImageUtilities.h; sourceTree = "<group>"; };
+		C8D8630C1644261E001B5668 /* ALGImageUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALGImageUtilities.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +137,8 @@
 			children = (
 				C8D862C91643BDD7001B5668 /* ALGAppDelegate.h */,
 				C8D862CA1643BDD7001B5668 /* ALGAppDelegate.m */,
+				C8D8630B1644261E001B5668 /* ALGImageUtilities.h */,
+				C8D8630C1644261E001B5668 /* ALGImageUtilities.m */,
 				C8D863061643C059001B5668 /* ALGScreenshotReader.h */,
 				C8D863071643C059001B5668 /* ALGScreenshotReader.m */,
 				C8D862D21643BDD7001B5668 /* ALGViewController.h */,
@@ -307,6 +313,7 @@
 				C8D862CB1643BDD7001B5668 /* ALGAppDelegate.m in Sources */,
 				C8D862D41643BDD7001B5668 /* ALGViewController.m in Sources */,
 				C8D863081643C059001B5668 /* ALGScreenshotReader.m in Sources */,
+				C8D8630D1644261E001B5668 /* ALGImageUtilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +323,7 @@
 			files = (
 				C8D862EC1643BDD7001B5668 /* PressletterTests.m in Sources */,
 				C8D863091643C059001B5668 /* ALGScreenshotReader.m in Sources */,
+				C8D8630E1644261E001B5668 /* ALGImageUtilities.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
