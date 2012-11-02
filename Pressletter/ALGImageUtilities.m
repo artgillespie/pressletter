@@ -91,7 +91,7 @@
     return [UIImage imageWithCGImage:imageRef];
 }
 
-+ (unsigned char *)thresholdDataForImage:(UIImage *)image {
++ (unsigned char *)thresholdDataForImage:(UIImage *)image colorData:(unsigned char **)colorData {
     // First get the image into your data buffer
     CGImageRef imageRef = [image CGImage];
     NSUInteger width = CGImageGetWidth(imageRef);
@@ -128,8 +128,11 @@
             threshPtr++;
         }
     }
-
-    free(rawData);
+    if (NULL != colorData) {
+        *colorData = rawData;
+    } else {
+        free(rawData);
+    }
     return thresholdData;
 }
 @end

@@ -51,7 +51,7 @@
     }
 }
 
-- (void)testReaderWith1384 {
+- (void)testReaderWith1386 {
     NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"IMG_1386" ofType:@"PNG"];
     STAssertNotNil(imagePath, @"Expected Image Path");
     UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
@@ -75,6 +75,40 @@
         }
     }
 }
+
+- (void)testReaderWith1384 {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"IMG_1384" ofType:@"PNG"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"K", @"S", @"O", @"G", @"C"],
+    @[@"N", @"U", @"P", @"T", @"S"],
+    @[@"D", @"O", @"N", @"U", @"N"],
+    @[@"S", @"R", @"E", @"S", @"L"],
+    @[@"A", @"O", @"T", @"N", @"W"],
+    ];
+
+    ALGTileColor colors[] = {ALGTileColorDarkBlue, ALGTileColorBlue, ALGTileColorBlue, ALGTileColorRed, ALGTileColorBlue,
+                             ALGTileColorBlue, ALGTileColorRed, ALGTileColorBlue, ALGTileColorBlue, ALGTileColorBlue,
+                             ALGTileColorRed, ALGTileColorBlue, ALGTileColorBlue, ALGTileColorRed, ALGTileColorRed,
+                             ALGTileColorDarkRed, ALGTileColorRed, ALGTileColorBlue, ALGTileColorRed, ALGTileColorDarkRed,
+                             ALGTileColorRed, ALGTileColorBlue, ALGTileColorDarkBlue, ALGTileColorBlue, ALGTileColorRed};
+
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+            STAssertTrue(colors[ii * 5 + jj] == tile.tileColor, @"Unexpected tile color: %d != %d", colors[ii * 5 + jj], tile.tileColor);
+        }
+    }
+}
+
 
 - (void)testReaderWithiPhone5_1 {
     NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPhone_5_1" ofType:@"png"];

@@ -19,6 +19,38 @@ unsigned char ALGDataForTile(unsigned char *buf, int tile, int x, int y) {
     return buf[row_offs + col_offs];
 }
 
+ALGTileColor ALGColorForTile(unsigned char *buf, int tile) {
+    // sample the color at tile's 10, 10
+    int tile_row = tile / 5;
+    int tile_col = tile % 5;
+    int tile_row_offs = tile_row * 128 * 640 * 4;
+    int tile_col_offs = tile_col * 128 * 4;
+    int row_offs = 10 * 640 * 4 + tile_row_offs;
+    int col_offs = 10 * 4 + tile_col_offs;
+    unsigned char r = buf[row_offs + col_offs];
+    unsigned char g = buf[row_offs + col_offs + 1];
+    unsigned char b = buf[row_offs + col_offs + 2];
+    if (r > 210 && g > 210 && b > 210) {
+        return ALGTileColorWhite;
+    } else if (r > 110 && r < 130 && g > 190 && g < 210 && b > 235 && b < 255) {
+        return ALGTileColorBlue;
+    } else if (r < 10 && g > 149 && g < 169 && b > 241) {
+        return ALGTileColorDarkBlue;
+    } else if (r > 237 && r < 257 && g > 143 && g < 163 && b > 131 && b < 151) {
+        return ALGTileColorRed;
+    } else if (r > 245 && g > 57 && g < 77 && b > 37 && b < 57) {
+        return ALGTileColorDarkRed;
+    } else {
+        NSLog(@"DON'T RECOGNIZE TILE COLOR!!! %d, %d, %d", r, g, b);
+    }
+    // 120, 200, 245 == light blue
+    // 0, 159, 251 == dark blue
+    // 233, 232, 229 == white
+    // 247, 153, 141 == light red
+    // 255, 67, 47 == dark red
+    return 0;
+}
+
 typedef enum {
     ALGNonRetina = 0,
     ALGRetina,
@@ -43,8 +75,10 @@ typedef enum {
 }
 
 - (BOOL)read {
-    unsigned char *thresholdData = [ALGImageUtilities thresholdDataForImage:_image];
-    unsigned char *alphaThreshold = [ALGImageUtilities thresholdDataForImage:[ALGImageUtilities alphabetSheet:NO]];
+
+    unsigned char *colorData = nil;
+    unsigned char *thresholdData = [ALGImageUtilities thresholdDataForImage:_image colorData:&colorData];
+    unsigned char *alphaThreshold = [ALGImageUtilities thresholdDataForImage:[ALGImageUtilities alphabetSheet:NO] colorData:nil];
 
     long tileOffset = 640 * 320;
     if (1136.f == _image.size.height) {
@@ -57,8 +91,8 @@ typedef enum {
         int hit = 0;
         for (int ii = 0; ii < 26; ++ii) { // letters
             int corr = 0;
-            for (int jj = 0; jj < 128; ++jj) { // rows
-                for (int kk = 0; kk < 128; ++kk) { // cols
+            for (int jj = 30; jj < 80; ++jj) { // rows
+                for (int kk = 30; kk < 80; ++kk) { // cols
                     unsigned char a = ALGDataForTile(alphaThreshold, ii, kk, jj);
                     // slide the buffer pointer forward (down) to where the tiles start
                     unsigned char t = ALGDataForTile(thresholdData + tileOffset, hh, kk, jj);
@@ -75,10 +109,12 @@ typedef enum {
         ALGScreenshotReaderTile *tile = [[ALGScreenshotReaderTile alloc] init];
         unichar hitChar = 'A' + hit;
         tile.letter = [NSString stringWithCharacters:&hitChar length:1];
-        NSLog(@"LETTER: %@", tile.letter);
+        // tile offset * 4 to account for rgba bytes
+        tile.tileColor = ALGColorForTile(colorData + tileOffset * 4, hh);
         [tmp addObject:tile];
     }
     _tiles = [NSArray arrayWithArray:tmp];
+    free(colorData);
     free(thresholdData);
     return YES;
 }
