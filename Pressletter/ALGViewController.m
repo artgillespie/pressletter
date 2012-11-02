@@ -16,7 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet ALGOverlayView *overlayView;
 @property (weak, nonatomic) IBOutlet UILabel *hitLabel;
-
+@property (weak, nonatomic) IBOutlet UIButton *chooseButton;
+@property (weak, nonatomic) IBOutlet UIButton *lastButton;
 @end
 
 // can we spell a with non-repeating instances of the characters in b?
@@ -52,7 +53,9 @@ bool ALGCanSpell(NSString *a, NSString *b) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadDictionary];
-	// Do any additional setup after loading the view, typically from a nib.
+    UIImage *image = [[UIImage imageNamed:@"UIAlertSheetBlackCancelButton"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 13.f, 0.f, 13.f)];
+    [self.chooseButton setBackgroundImage:image forState:UIControlStateNormal];
+    [self.lastButton setBackgroundImage:image forState:UIControlStateNormal];
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
     [self.hitLabel addGestureRecognizer:tapRecognizer];
     self.hitLabel.userInteractionEnabled = YES;
@@ -69,12 +72,12 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
     if (NO == [reader read]) {
         NSLog(@"error reading screenshot!");
+        return;
     } else {
     }
     self.overlayView.screenshotReader = reader;
     __weak ALGViewController *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSLog(@"starting search... %@", [reader stringForTiles]);
         NSString *compareString = [[reader stringForTiles] lowercaseString];
         NSMutableArray *hits = [NSMutableArray arrayWithCapacity:1024];
         NSInteger hitCount = 0;
@@ -86,18 +89,12 @@ bool ALGCanSpell(NSString *a, NSString *b) {
                     break;
             }
         }
-        NSLog(@"search complete: %d hits", [hits count]);
         dispatch_async(dispatch_get_main_queue(), ^{
             _hitWords = [NSArray arrayWithArray:hits];
             _hitIndex = 0;
             [weakSelf updateHitLabel];
         });
     });
-    /*
-    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF contains[cd] %@", [reader stringForTiles]];
-    NSArray *matching = [_wordDictionary filteredArrayUsingPredicate:pred];
-    */
-    // NSLog(@"%d MATCHES for %@!", [matching count], [reader stringForTiles]);
 }
 
 - (IBAction)chooseButton:(id)sender {
@@ -165,7 +162,8 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     if (nil == _hitWords) {
         return;
     }
-    self.hitLabel.text = _hitWords[_hitIndex];
+    self.overlayView.hitWord = _hitWords[_hitIndex];
+    self.hitLabel.text = [_hitWords[_hitIndex] uppercaseString];
 }
 
 - (void)labelTapped:(UITapGestureRecognizer *)gestureRecognizer {

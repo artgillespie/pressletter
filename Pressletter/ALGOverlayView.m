@@ -22,31 +22,45 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+    if (nil == _screenshotReader) {
+        return;
+    }
+    BOOL colorDebug = NO;
     for (int ii = 0; ii < 5; ++ii) { // rows
         for (int jj = 0; jj < 5; ++jj) {
             CGRect tileRect = CGRectMake(jj * 64.f, ii * 64.f, 64.f, 64.f);
             ALGScreenshotReaderTile *tile = [_screenshotReader tileAtRow:ii column:jj];
             [[UIColor blackColor] set];
             [tile.letter drawInRect:tileRect withFont:[UIFont boldSystemFontOfSize:14.f]];
-            switch (tile.tileColor) {
-                case ALGTileColorBlue:
-                    [[UIColor colorWithRed:0.47 green:0.78 blue:0.96 alpha:0.5] set];
-                    break;
-                case ALGTileColorDarkBlue:
-                    [[UIColor colorWithRed:0.00 green:0.64 blue:1.00 alpha:0.5] set];
-                    break;
-                case ALGTileColorRed:
-                    [[UIColor colorWithRed:0.97 green:0.60 blue:0.55 alpha:0.5] set];
-                    break;
-                case ALGTileColorDarkRed:
-                    [[UIColor colorWithRed:1.00 green:0.26 blue:0.18 alpha:0.5] set];
-                    break;
-                case ALGTileColorWhite:
-                    [[UIColor colorWithRed:1.f green:1.f blue:1.f alpha:0.5f] set];
-                    break;
+            if (YES == colorDebug) {
+                switch (tile.tileColor) {
+                    case ALGTileColorBlue:
+                        [[UIColor colorWithRed:0.47 green:0.78 blue:0.96 alpha:0.5] set];
+                        break;
+                    case ALGTileColorDarkBlue:
+                        [[UIColor colorWithRed:0.00 green:0.64 blue:1.00 alpha:0.5] set];
+                        break;
+                    case ALGTileColorRed:
+                        [[UIColor colorWithRed:0.97 green:0.60 blue:0.55 alpha:0.5] set];
+                        break;
+                    case ALGTileColorDarkRed:
+                        [[UIColor colorWithRed:1.00 green:0.26 blue:0.18 alpha:0.5] set];
+                        break;
+                    case ALGTileColorWhite:
+                        [[UIColor colorWithRed:1.f green:1.f blue:1.f alpha:0.5f] set];
+                        break;
+                }
+                CGContextRef ctx = UIGraphicsGetCurrentContext();
+                CGContextFillEllipseInRect(ctx, tileRect);
             }
-            CGContextRef ctx = UIGraphicsGetCurrentContext();
-            CGContextFillEllipseInRect(ctx, tileRect);
+            NSLog(@"_hitWord: %@", _hitWord);
+            if (_hitWord && NSNotFound != [_hitWord rangeOfString:tile.letter].location) {
+                NSLog(@"drawing ring around hit word letter!!!");
+                CGContextRef ctx = UIGraphicsGetCurrentContext();
+                CGContextSetLineWidth(ctx, 4.f);
+                CGContextSetRGBStrokeColor(ctx, 1.f, 0.f, 0.f, 0.5);
+                CGContextStrokeEllipseInRect(ctx, tileRect);
+            }
         }
     }
 }
@@ -55,6 +69,11 @@
 
 - (void)setScreenshotReader:(ALGScreenshotReader *)screenshotReader {
     _screenshotReader = screenshotReader;
+    [self setNeedsDisplay];
+}
+
+- (void)setHitWord:(NSString *)hitWord {
+    _hitWord = [hitWord uppercaseString];
     [self setNeedsDisplay];
 }
 

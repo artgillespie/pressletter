@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C815FC0A1644890A000EFA3E /* UIAlertSheetBlackCancelButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C815FC091644890A000EFA3E /* UIAlertSheetBlackCancelButton@2x.png */; };
 		C8D862BB1643BDD7001B5668 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BA1643BDD7001B5668 /* UIKit.framework */; };
 		C8D862BD1643BDD7001B5668 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BC1643BDD7001B5668 /* Foundation.framework */; };
 		C8D862BF1643BDD7001B5668 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BE1643BDD7001B5668 /* CoreGraphics.framework */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C815FC091644890A000EFA3E /* UIAlertSheetBlackCancelButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIAlertSheetBlackCancelButton@2x.png"; sourceTree = "<group>"; };
 		C8D862B61643BDD7001B5668 /* Pressletter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pressletter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8D862BA1643BDD7001B5668 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C8D862BC1643BDD7001B5668 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -219,6 +221,7 @@
 		C8D8632116447236001B5668 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C815FC091644890A000EFA3E /* UIAlertSheetBlackCancelButton@2x.png */,
 				C8D8632216447264001B5668 /* dict_long_to_short.txt */,
 			);
 			path = Resources;
@@ -304,6 +307,7 @@
 				C8D86314164445F6001B5668 /* iPhone_5_2.png in Resources */,
 				C8D8632016446430001B5668 /* MuseoSansRounded-700.otf in Resources */,
 				C8D8632316447264001B5668 /* dict_long_to_short.txt in Resources */,
+				C815FC0A1644890A000EFA3E /* UIAlertSheetBlackCancelButton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,6 +533,7 @@
 				C8D862F11643BDD7001B5668 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C8D862F21643BDD7001B5668 /* Build configuration list for PBXNativeTarget "PressletterTests" */ = {
 			isa = XCConfigurationList;
@@ -537,6 +542,7 @@
 				C8D862F41643BDD7001B5668 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -13,5 +13,6 @@
 @interface ALGOverlayView : UIView
 
 @property (nonatomic, strong) ALGScreenshotReader *screenshotReader;
+@property (nonatomic, strong) NSString *hitWord;
 
 @end
