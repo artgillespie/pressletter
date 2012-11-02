@@ -80,6 +80,13 @@ typedef enum {
     unsigned char *thresholdData = [ALGImageUtilities thresholdDataForImage:_image colorData:&colorData];
     unsigned char *alphaThreshold = [ALGImageUtilities thresholdDataForImage:[ALGImageUtilities alphabetSheet:NO] colorData:nil];
 
+    NSString *docpath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    if (NO == [[NSFileManager defaultManager] fileExistsAtPath:docpath]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:docpath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    // [self writeGrayscaleBytes:thresholdData size:_image.size toPath:[docpath stringByAppendingPathComponent:@"thresholdData.png"] error:nil];
+    // [self writeGrayscaleBytes:alphaThreshold size:_image.size toPath:[docpath stringByAppendingPathComponent:@"alphaSheet.png"] error:nil];
+
     long tileOffset = 640 * 320;
     if (1136.f == _image.size.height) {
         tileOffset = 640 * (1136 - 640);
@@ -124,8 +131,15 @@ typedef enum {
     return _tiles[row * 5 + column];
 }
 
-#pragma mark - Private Debugging Methods
+- (NSString *)stringForTiles {
+    NSMutableString *retString = [NSMutableString stringWithCapacity:25];
+    for (ALGScreenshotReaderTile *tile in _tiles) {
+        [retString appendString:tile.letter];
+    }
+    return [NSString stringWithString:retString];
+}
 
+#pragma mark - Private Debugging Methods
 
 - (BOOL)writeGrayscaleBytes:(unsigned char *)buf size:(CGSize)size toPath:(NSString *)path error:(NSError **)error {
     NSParameterAssert(nil != buf);

@@ -20,6 +20,7 @@
     NSArray *alphaArray = [ALGImageUtilities alphabetArray];
 
     UIFont *font = [UIFont fontWithName:@"MuseoSansRounded-700" size:80.f];
+    NSAssert(nil != font, @"Couldn't Get Font");
     UIGraphicsBeginImageContext(imageSize);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     // if (YES == debug) {

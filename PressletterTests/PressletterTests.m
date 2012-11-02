@@ -26,31 +26,6 @@
     [super tearDown];
 }
 
-- (void)testImageLoad {
-    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"IMG_1384" ofType:@"PNG"];
-    STAssertNotNil(imagePath, @"Expected Image Path");
-    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
-    STAssertNotNil(image, @"Expected image");
-}
-
-- (void)testLoadingFontInTestBundle {
-    // wasn't even sure this was possible
-    for (NSString *familyName in [UIFont familyNames]) {
-        NSLog(@"familyName: %@", familyName);
-    }
-    UIFont *font = [UIFont fontWithName:@"MuseoSansRounded-700" size:12.f];
-    STAssertNotNil(font, @"Couldn't load font");
-}
-
-- (void)testAlphaSheet {
-    UIImage *alphaSheet = [ALGImageUtilities alphabetSheet:YES];
-    NSData *pngData = UIImagePNGRepresentation(alphaSheet);
-    NSError *error = nil;
-    if(NO == [pngData writeToFile:@"/Users/artgillespie/Desktop/alphaSheet.png" options:NSDataWritingAtomic error:&error]) {
-        STFail(@"Couldn't write alphaSheet to file: %@", error);
-    }
-}
-
 - (void)testReaderWith1386 {
     NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"IMG_1386" ofType:@"PNG"];
     STAssertNotNil(imagePath, @"Expected Image Path");

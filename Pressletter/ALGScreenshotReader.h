@@ -28,5 +28,6 @@ typedef enum {
 - (id)initWithImage:(UIImage *)image;
 - (BOOL)read;
 - (ALGScreenshotReaderTile *)tileAtRow:(NSInteger)row column:(NSInteger)column;
+- (NSString *)stringForTiles;
 
 @end
