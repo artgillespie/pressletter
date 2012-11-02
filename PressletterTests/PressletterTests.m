@@ -7,6 +7,7 @@
 //
 
 #import "PressletterTests.h"
+#import "ALGScreenshotReader.h"
 
 @implementation PressletterTests
 
@@ -24,9 +25,35 @@
     [super tearDown];
 }
 
-- (void)testExample
-{
-    STFail(@"Unit tests are not implemented yet in PressletterTests");
+- (void)testImageLoad {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"IMG_1384" ofType:@"PNG"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+}
+
+- (void)testReaderWith1384 {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"IMG_1384" ofType:@"PNG"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+        @[@"L", @"P", @"G", @"O", @"C"],
+        @[@"C", @"Z", @"I", @"R", @"J"],
+        @[@"K", @"C", @"C", @"M", @"X"],
+        @[@"L", @"U", @"Z", @"S", @"K"],
+        @[@"M", @"F", @"M", @"X", @"K"],
+    ];
+    for (int ii = 0; ii < 5; ++ii) {
+        for (int jj = 0; jj < 5; ++jj) {
+            STAssertEquals(expected[ii][jj], [reader letterAtRow:ii column:jj], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], [reader letterAtRow:ii column:jj]);
+        }
+    }
 }
 
 @end

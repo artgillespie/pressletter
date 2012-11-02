@@ -23,6 +23,12 @@
 		C8D862E11643BDD7001B5668 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BC1643BDD7001B5668 /* Foundation.framework */; };
 		C8D862E91643BDD7001B5668 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C8D862E71643BDD7001B5668 /* InfoPlist.strings */; };
 		C8D862EC1643BDD7001B5668 /* PressletterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D862EB1643BDD7001B5668 /* PressletterTests.m */; };
+		C8D863021643BF0B001B5668 /* IMG_1384.PNG in Resources */ = {isa = PBXBuildFile; fileRef = C8D862FE1643BF0B001B5668 /* IMG_1384.PNG */; };
+		C8D863031643BF0B001B5668 /* IMG_1385.PNG in Resources */ = {isa = PBXBuildFile; fileRef = C8D862FF1643BF0B001B5668 /* IMG_1385.PNG */; };
+		C8D863041643BF0B001B5668 /* IMG_1386.PNG in Resources */ = {isa = PBXBuildFile; fileRef = C8D863001643BF0B001B5668 /* IMG_1386.PNG */; };
+		C8D863051643BF0B001B5668 /* MuseoSansRounded-700.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8D863011643BF0B001B5668 /* MuseoSansRounded-700.otf */; };
+		C8D863081643C059001B5668 /* ALGScreenshotReader.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D863071643C059001B5668 /* ALGScreenshotReader.m */; };
+		C8D863091643C059001B5668 /* ALGScreenshotReader.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D863071643C059001B5668 /* ALGScreenshotReader.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +64,12 @@
 		C8D862E81643BDD7001B5668 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C8D862EA1643BDD7001B5668 /* PressletterTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PressletterTests.h; sourceTree = "<group>"; };
 		C8D862EB1643BDD7001B5668 /* PressletterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PressletterTests.m; sourceTree = "<group>"; };
+		C8D862FE1643BF0B001B5668 /* IMG_1384.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_1384.PNG; sourceTree = "<group>"; };
+		C8D862FF1643BF0B001B5668 /* IMG_1385.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_1385.PNG; sourceTree = "<group>"; };
+		C8D863001643BF0B001B5668 /* IMG_1386.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_1386.PNG; sourceTree = "<group>"; };
+		C8D863011643BF0B001B5668 /* MuseoSansRounded-700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSansRounded-700.otf"; sourceTree = "<group>"; };
+		C8D863061643C059001B5668 /* ALGScreenshotReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALGScreenshotReader.h; sourceTree = "<group>"; };
+		C8D863071643C059001B5668 /* ALGScreenshotReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALGScreenshotReader.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +131,8 @@
 			children = (
 				C8D862C91643BDD7001B5668 /* ALGAppDelegate.h */,
 				C8D862CA1643BDD7001B5668 /* ALGAppDelegate.m */,
+				C8D863061643C059001B5668 /* ALGScreenshotReader.h */,
+				C8D863071643C059001B5668 /* ALGScreenshotReader.m */,
 				C8D862D21643BDD7001B5668 /* ALGViewController.h */,
 				C8D862D31643BDD7001B5668 /* ALGViewController.m */,
 				C8D862D51643BDD7001B5668 /* ALGViewController.xib */,
@@ -144,6 +158,7 @@
 		C8D862E41643BDD7001B5668 /* PressletterTests */ = {
 			isa = PBXGroup;
 			children = (
+				C8D862F51643BE7B001B5668 /* Resources */,
 				C8D862EA1643BDD7001B5668 /* PressletterTests.h */,
 				C8D862EB1643BDD7001B5668 /* PressletterTests.m */,
 				C8D862E51643BDD7001B5668 /* Supporting Files */,
@@ -158,6 +173,17 @@
 				C8D862E71643BDD7001B5668 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C8D862F51643BE7B001B5668 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C8D862FE1643BF0B001B5668 /* IMG_1384.PNG */,
+				C8D862FF1643BF0B001B5668 /* IMG_1385.PNG */,
+				C8D863001643BF0B001B5668 /* IMG_1386.PNG */,
+				C8D863011643BF0B001B5668 /* MuseoSansRounded-700.otf */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -245,6 +271,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8D862E91643BDD7001B5668 /* InfoPlist.strings in Resources */,
+				C8D863021643BF0B001B5668 /* IMG_1384.PNG in Resources */,
+				C8D863031643BF0B001B5668 /* IMG_1385.PNG in Resources */,
+				C8D863041643BF0B001B5668 /* IMG_1386.PNG in Resources */,
+				C8D863051643BF0B001B5668 /* MuseoSansRounded-700.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,6 +304,7 @@
 				C8D862C71643BDD7001B5668 /* main.m in Sources */,
 				C8D862CB1643BDD7001B5668 /* ALGAppDelegate.m in Sources */,
 				C8D862D41643BDD7001B5668 /* ALGViewController.m in Sources */,
+				C8D863081643C059001B5668 /* ALGScreenshotReader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8D862EC1643BDD7001B5668 /* PressletterTests.m in Sources */,
+				C8D863091643C059001B5668 /* ALGScreenshotReader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
