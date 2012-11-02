@@ -8,10 +8,25 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    ALGTileColorWhite = 0,
+    ALGTileColorRed,
+    ALGTileColorDarkRed,
+    ALGTileColorBlue,
+    ALGTileColorDarkBlue
+} ALGTileColor;
+
+@interface ALGScreenshotReaderTile : NSObject
+
+@property (nonatomic, assign) ALGTileColor tileColor;
+@property (nonatomic, strong) NSString *letter;
+
+@end
+
 @interface ALGScreenshotReader : NSObject
 
 - (id)initWithImage:(UIImage *)image;
 - (BOOL)read;
-- (NSString *)letterAtRow:(NSInteger)row column:(NSInteger)column;
+- (ALGScreenshotReaderTile *)tileAtRow:(NSInteger)row column:(NSInteger)column;
 
 @end

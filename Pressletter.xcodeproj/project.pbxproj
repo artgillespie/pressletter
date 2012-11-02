@@ -29,6 +29,7 @@
 		C8D863051643BF0B001B5668 /* MuseoSansRounded-700.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8D863011643BF0B001B5668 /* MuseoSansRounded-700.otf */; };
 		C8D863081643C059001B5668 /* ALGScreenshotReader.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D863071643C059001B5668 /* ALGScreenshotReader.m */; };
 		C8D863091643C059001B5668 /* ALGScreenshotReader.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D863071643C059001B5668 /* ALGScreenshotReader.m */; };
+		C8D8630A1643C61F001B5668 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BE1643BDD7001B5668 /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8D8630A1643C61F001B5668 /* CoreGraphics.framework in Frameworks */,
 				C8D862DF1643BDD7001B5668 /* SenTestingKit.framework in Frameworks */,
 				C8D862E01643BDD7001B5668 /* UIKit.framework in Frameworks */,
 				C8D862E11643BDD7001B5668 /* Foundation.framework in Frameworks */,

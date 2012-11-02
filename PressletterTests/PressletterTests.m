@@ -51,7 +51,8 @@
     ];
     for (int ii = 0; ii < 5; ++ii) {
         for (int jj = 0; jj < 5; ++jj) {
-            STAssertEquals(expected[ii][jj], [reader letterAtRow:ii column:jj], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], [reader letterAtRow:ii column:jj]);
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertEquals(expected[ii][jj], tile.letter, @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
         }
     }
 }
