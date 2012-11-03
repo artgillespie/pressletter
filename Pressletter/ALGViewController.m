@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *hitLabel;
 @property (weak, nonatomic) IBOutlet UIButton *chooseButton;
 @property (weak, nonatomic) IBOutlet UIButton *lastButton;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @end
 
 // can we spell a with non-repeating instances of the characters in b?
@@ -72,12 +73,14 @@ bool ALGCanSpell(NSString *a, NSString *b) {
 
 - (void)readImage:(UIImage *)image {
     NSParameterAssert([NSThread isMainThread]);
+    [self.activityIndicator startAnimating];
     ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
     self.imageView.image = reader.croppedImage;
     __weak ALGViewController *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (NO == [reader read]) {
             NSLog(@"error reading screenshot!");
+            [self.activityIndicator stopAnimating];
             return;
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -91,7 +94,7 @@ bool ALGCanSpell(NSString *a, NSString *b) {
             if (true == ALGCanSpell(word, compareString)) {
                 [hits addObject:word];
                 hitCount++;
-                if (hitCount > 20)
+                if (hitCount > 30)
                     break;
             }
         }
@@ -99,6 +102,7 @@ bool ALGCanSpell(NSString *a, NSString *b) {
             _hitWords = [NSArray arrayWithArray:hits];
             _hitIndex = 0;
             [weakSelf updateHitLabel];
+            [self.activityIndicator stopAnimating];
         });
     });
 }
@@ -195,4 +199,8 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     [self updateHitLabel];
 }
 
+- (void)viewDidUnload {
+    [self setActivityIndicator:nil];
+    [super viewDidUnload];
+}
 @end
