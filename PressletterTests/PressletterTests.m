@@ -185,4 +185,54 @@
     }
 }
 
+- (void)testReaderWithiPadLandscape {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPadLandscape" ofType:@"png"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"I", @"F", @"D", @"Q", @"X"],
+    @[@"M", @"A", @"D", @"R", @"A"],
+    @[@"G", @"A", @"E", @"P", @"C"],
+    @[@"R", @"O", @"A", @"V", @"G"],
+    @[@"H", @"S", @"H", @"L", @"Y"],
+    ];
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+        }
+    }
+}
+
+- (void)testReaderWithiPadPortrait {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPadPortrait" ofType:@"png"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"I", @"F", @"D", @"Q", @"X"],
+    @[@"M", @"A", @"D", @"R", @"A"],
+    @[@"G", @"A", @"E", @"P", @"C"],
+    @[@"R", @"O", @"A", @"V", @"G"],
+    @[@"H", @"S", @"H", @"L", @"Y"],
+    ];
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+        }
+    }
+}
+
 @end
