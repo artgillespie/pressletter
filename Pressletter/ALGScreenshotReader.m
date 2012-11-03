@@ -171,8 +171,8 @@ typedef enum {
         int hit = 0;
         for (int ii = 0; ii < 26; ++ii) { // letters
             int corr = 0;
-            for (int jj = 0; jj < tileHeight; ++jj) { // rows
-                for (int kk = 0; kk < tileWidth; ++kk) { // cols
+            for (int jj = 20; jj < tileHeight - 20; jj += 2) { // rows
+                for (int kk = 20; kk < tileWidth - 20; kk += 2) { // cols
                     unsigned char a = ALGDataForTile(alphaThreshold, ii, kk, jj, tileWidth);
                     unsigned char t = ALGDataForTile(thresholdData, hh, kk, jj, tileWidth);
                     if (a == t) {
