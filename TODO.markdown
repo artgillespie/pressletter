@@ -1,6 +1,6 @@
 * Talk to Joe about an app Icon / app design? (waiting to hear back)
 * App Icon (joe?)
-* iPad Interface
+* It'd be nice to offer to delete the screenshot.
 * Activity Indicator when searching for words
 * Launch Images 
 * Launch Animation (slide or fade text and buttons in)

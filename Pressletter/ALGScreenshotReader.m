@@ -124,6 +124,7 @@ typedef enum {
         _type = iPhone5;
         _scale = 2.f;
     } else {
+        // TODO: We should just bail out here.
         NSLog(@"NOT A LETTERPRESS SCREENSHOT");
     }
     // crop the screenshot appropriately
@@ -137,7 +138,7 @@ typedef enum {
 
     CGImageRef croppedCGImage = CGImageCreateWithImageInRect([_image CGImage], cropRect);
     _croppedImage = [UIImage imageWithCGImage:croppedCGImage];
-
+    CGImageRelease(croppedCGImage);
 }
 
 - (BOOL)read {
