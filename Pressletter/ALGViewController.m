@@ -73,6 +73,7 @@ bool ALGCanSpell(NSString *a, NSString *b) {
 
 - (void)readImage:(UIImage *)image {
     NSParameterAssert([NSThread isMainThread]);
+    self.overlayView.screenshotReader = nil;
     self.hitLabel.text = @"";
     [self.activityIndicator startAnimating];
     ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
@@ -84,9 +85,6 @@ bool ALGCanSpell(NSString *a, NSString *b) {
             [self.activityIndicator stopAnimating];
             return;
         } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.overlayView.screenshotReader = reader;
-            });
         }
         NSString *compareString = [[reader stringForTiles] lowercaseString];
         NSMutableArray *hits = [NSMutableArray arrayWithCapacity:1024];
@@ -100,6 +98,7 @@ bool ALGCanSpell(NSString *a, NSString *b) {
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.overlayView.screenshotReader = reader;
             _hitWords = [NSArray arrayWithArray:hits];
             _hitIndex = 0;
             [weakSelf updateHitLabel];
