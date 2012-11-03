@@ -9,6 +9,7 @@
 #import "ALGScreenshotReader.h"
 #import "ALGImageUtilities.h"
 
+// get byte at tile's x, y given tile of size (side, side)
 unsigned char ALGDataForTile(unsigned char *buf, int tile, int x, int y, int side) {
     int tile_row = tile / 5;
     int tile_col = tile % 5;
@@ -19,14 +20,20 @@ unsigned char ALGDataForTile(unsigned char *buf, int tile, int x, int y, int sid
     return buf[row_offs + col_offs];
 }
 
+// sample tile color given tile of size (side, side)
 ALGTileColor ALGColorForTile(unsigned char *buf, int tile, int side) {
-    // sample the color at tile's 10, 10
+
+    int sampleAt = 20;
+    if (64 == side) {
+        sampleAt = 10;
+    }
+
     int tile_row = tile / 5;
     int tile_col = tile % 5;
     int tile_row_offs = tile_row * side * side * 5 * 4;
     int tile_col_offs = tile_col * side * 4;
-    int row_offs = 10 * side * 4 + tile_row_offs;
-    int col_offs = 10 * 4 + tile_col_offs;
+    int row_offs = sampleAt * side * 4 + tile_row_offs;
+    int col_offs = sampleAt * 4 + tile_col_offs;
     unsigned char r = buf[row_offs + col_offs];
     unsigned char g = buf[row_offs + col_offs + 1];
     unsigned char b = buf[row_offs + col_offs + 2];
@@ -136,19 +143,25 @@ typedef enum {
     _croppedImage = [UIImage imageWithCGImage:croppedCGImage];
 
     unsigned char *thresholdData = [ALGImageUtilities thresholdDataForImage:_croppedImage colorData:&colorData];
-    UIImage *alphabetSheet = [ALGImageUtilities alphabetSheet:tileSize scale:scale debug:YES];
-    unsigned char *alphaThreshold = [ALGImageUtilities thresholdDataForImage:alphabetSheet colorData:nil];
 
+    // This is how you generate alphabet sheets
+    // UIImage *alphabetSheet = [ALGImageUtilities alphabetSheet:tileSize scale:scale debug:YES];
+    // unsigned char *alphaThreshold = [ALGImageUtilities thresholdDataForImage:alphabetSheet colorData:nil];
+
+    unsigned char *alphaThreshold = [ALGImageUtilities alphaDataForTileSize:CGSizeMake(tileSize.width * scale, tileSize.height * scale)];
+
+    /*
+    // useful for debugging: write out images to Documents directory
     NSString *docpath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     if (NO == [[NSFileManager defaultManager] fileExistsAtPath:docpath]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:docpath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     NSData *croppedData = UIImagePNGRepresentation(_croppedImage);
     [croppedData writeToFile:[docpath stringByAppendingPathComponent:@"croppedImage.png"] options:NSDataWritingAtomic error:nil];
-    NSData *alphaSheet = UIImagePNGRepresentation(alphabetSheet);
-    [alphaSheet writeToFile:[docpath stringByAppendingPathComponent:@"alphabetSheet.png"] options:NSDataWritingAtomic error:nil];
     [self writeGrayscaleBytes:thresholdData size:_croppedImage.size toPath:[docpath stringByAppendingPathComponent:@"thresholdData.png"] error:nil];
-    [self writeGrayscaleBytes:alphaThreshold size:alphabetSheet.size toPath:[docpath stringByAppendingPathComponent:@"alphaSheet.png"] error:nil];
+    [self writeGrayscaleBytes:alphaThreshold size:CGSizeMake(tileSize.width * scale * 5.f, tileSize.height * scale * 6.f) toPath:[docpath stringByAppendingPathComponent:@"alphaSheet.png"] error:nil];
+    // [self writeGrayscaleCache:alphaThreshold size:alphabetSheet.size toPath:[docpath stringByAppendingPathComponent:[NSString stringWithFormat:@"alpha_%d.thrsh", (int)(tileSize.width * scale)]] error:nil];
+     */
 
     NSMutableArray *tmp = [NSMutableArray arrayWithCapacity:25];
     NSInteger tileWidth = tileSize.width * scale;
@@ -161,7 +174,6 @@ typedef enum {
             for (int jj = 0; jj < tileHeight; ++jj) { // rows
                 for (int kk = 0; kk < tileWidth; ++kk) { // cols
                     unsigned char a = ALGDataForTile(alphaThreshold, ii, kk, jj, tileWidth);
-                    // slide the buffer pointer forward (down) to where the tiles start
                     unsigned char t = ALGDataForTile(thresholdData, hh, kk, jj, tileWidth);
                     if (a == t) {
                         corr++;
@@ -212,6 +224,12 @@ typedef enum {
         return NO;
     }
     NSData *data = UIImagePNGRepresentation(grayscaleImage);
+    return [data writeToFile:path options:NSDataWritingAtomic error:error];
+}
+
+- (BOOL)writeGrayscaleCache:(unsigned char *)buf size:(CGSize)size toPath:(NSString *)path error:(NSError **)error {
+    NSParameterAssert(nil != buf);
+    NSData *data = [NSData dataWithBytes:buf length:size.width * size.height];
     return [data writeToFile:path options:NSDataWritingAtomic error:error];
 }
 

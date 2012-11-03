@@ -19,7 +19,16 @@
     CGSize imageSize = CGSizeMake(tileSize.width * numCols, tileSize.height * numRows);
     NSArray *alphaArray = [ALGImageUtilities alphabetArray];
 
-    UIFont *font = [UIFont fontWithName:@"MuseoSansRounded-700" size:80.f];
+    CGFloat fontSize = 80.f;
+    if (228.f == tileSize.width) {
+        // iPad Retina
+        fontSize = 160.f;
+    } else if (64.f == tileSize.width) {
+        // iPhone Non-Retina
+        fontSize = 40.f;
+    }
+    
+    UIFont *font = [UIFont fontWithName:@"MuseoSansRounded-700" size:fontSize];
     NSAssert(nil != font, @"Couldn't Get Font");
     UIGraphicsBeginImageContext(imageSize);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -99,7 +108,6 @@
 }
 
 + (unsigned char *)thresholdDataForImage:(UIImage *)image colorData:(unsigned char **)colorData {
-    // First get the image into your data buffer
     CGImageRef imageRef = [image CGImage];
     NSUInteger width = CGImageGetWidth(imageRef);
     NSUInteger height = CGImageGetHeight(imageRef);
@@ -142,5 +150,30 @@
         free(rawData);
     }
     return thresholdData;
+}
+
++ (unsigned char *)alphaDataForTileSize:(CGSize)size {
+    NSString *fileName = [NSString stringWithFormat:@"alphaSheet_%d.png", (int)size.width];
+    // we do this instead of `imageNamed` to work around loading assets in unit test bundles
+    NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:fileName ofType:nil];
+    UIImage *alphaImage = [UIImage imageWithContentsOfFile:filePath];
+    NSAssert(nil != alphaImage, @"Couldn't load alpha sheet: %@", fileName);
+    CGImageRef imageRef = [alphaImage CGImage];
+    NSUInteger width = CGImageGetWidth(imageRef);
+    NSUInteger height = CGImageGetHeight(imageRef);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    unsigned char *rawData = (unsigned char*) calloc(height * width, sizeof(unsigned char));
+    NSUInteger bytesPerPixel = 1;
+    NSUInteger bytesPerRow = bytesPerPixel * width;
+    NSUInteger bitsPerComponent = 8;
+    CGContextRef context = CGBitmapContextCreate(rawData, width, height,
+                                                 bitsPerComponent, bytesPerRow, colorSpace,
+                                                 kCGImageAlphaNone);
+    CGColorSpaceRelease(colorSpace);
+
+    CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
+    CGContextRelease(context);
+
+    return rawData;
 }
 @end
