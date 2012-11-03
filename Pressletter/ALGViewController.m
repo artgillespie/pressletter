@@ -73,15 +73,17 @@ bool ALGCanSpell(NSString *a, NSString *b) {
 - (void)readImage:(UIImage *)image {
     NSParameterAssert([NSThread isMainThread]);
     ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
-    if (NO == [reader read]) {
-        NSLog(@"error reading screenshot!");
-        return;
-    } else {
-    }
     self.imageView.image = reader.croppedImage;
-    self.overlayView.screenshotReader = reader;
     __weak ALGViewController *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (NO == [reader read]) {
+            NSLog(@"error reading screenshot!");
+            return;
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.overlayView.screenshotReader = reader;
+            });
+        }
         NSString *compareString = [[reader stringForTiles] lowercaseString];
         NSMutableArray *hits = [NSMutableArray arrayWithCapacity:1024];
         NSInteger hitCount = 0;

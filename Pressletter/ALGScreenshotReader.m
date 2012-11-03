@@ -59,10 +59,14 @@ ALGTileColor ALGColorForTile(unsigned char *buf, int tile, int side) {
 }
 
 typedef enum {
-    ALGNonRetina = 0,
-    ALGRetina,
-    ALGiPhone5,
-} ALGDimensions;
+    iPhone4,
+    iPhone4Retina,
+    iPhone5,
+    iPadPortrait,
+    iPadPortraitRetina,
+    iPadLandscape,
+    iPadLandscapeRetina
+} screenshotType;
 
 @implementation ALGScreenshotReaderTile
 
@@ -72,75 +76,73 @@ typedef enum {
     __strong UIImage *_image;
     __strong NSArray *_tiles;
     __strong UIImage *_croppedImage;
+    screenshotType _type;
+    CGFloat _scale;
+    CGSize _tileSize;
+    CGFloat _side;
 }
 
 - (id)initWithImage:(UIImage *)image {
     self = [super init];
     if (nil != self) {
         _image = image;
+        [self setup];
     }
     return self;
 }
 
-- (BOOL)read {
-    typedef enum {
-        iPhone4,
-        iPhone4Retina,
-        iPhone5,
-        iPadPortrait,
-        iPadPortraitRetina,
-        iPadLandscape,
-        iPadLandscapeRetina
-    } screenshotType;
-
+- (void)setup {
     CGSize screenshotSize = _image.size;
-    CGSize tileSize;
-    CGFloat scale = 2.f;
-    screenshotType type = iPhone5;
+    _scale = 2.f;
+    _type = iPhone5;
     if (screenshotSize.width == 1024.f) {
-        tileSize = CGSizeMake(114.f, 114.f);
-        scale = 1.f;
-        type = iPadLandscape;
+        _tileSize = CGSizeMake(114.f, 114.f);
+        _scale = 1.f;
+        _type = iPadLandscape;
     } else if (screenshotSize.height == 1024.f) {
-        tileSize = CGSizeMake(114.f, 114.f);
-        scale = 1.f;
-        type = iPadPortrait;
+        _tileSize = CGSizeMake(114.f, 114.f);
+        _scale = 1.f;
+        _type = iPadPortrait;
     } else if (screenshotSize.width == 2048.f) {
-        tileSize = CGSizeMake(114.f, 114.f);
-        scale = 2.f;
-        type = iPadLandscapeRetina;
+        _tileSize = CGSizeMake(114.f, 114.f);
+        _scale = 2.f;
+        _type = iPadLandscapeRetina;
     } else if (screenshotSize.height == 2048.f) {
-        tileSize = CGSizeMake(114.f, 114.f);
-        scale = 2.f;
-        type = iPadPortraitRetina;
+        _tileSize = CGSizeMake(114.f, 114.f);
+        _scale = 2.f;
+        _type = iPadPortraitRetina;
     } else if (screenshotSize.width == 320.f) {
-        tileSize = CGSizeMake(64.f, 64.f);
-        type = iPhone4;
-        scale = 1.f;
+        _tileSize = CGSizeMake(64.f, 64.f);
+        _type = iPhone4;
+        _scale = 1.f;
     } else if (screenshotSize.height == 960.f) {
-        tileSize = CGSizeMake(64.f, 64.f);
-        type = iPhone4Retina;
-        scale = 2.f;
+        _tileSize = CGSizeMake(64.f, 64.f);
+        _type = iPhone4Retina;
+        _scale = 2.f;
     } else if (screenshotSize.height == 1136.f) {
-        tileSize = CGSizeMake(64.f, 64.f);
-        type = iPhone5;
-        scale = 2.f;
+        _tileSize = CGSizeMake(64.f, 64.f);
+        _type = iPhone5;
+        _scale = 2.f;
     } else {
         NSLog(@"NOT A LETTERPRESS SCREENSHOT");
-        return NO;
     }
-    unsigned char *colorData = nil;
     // crop the screenshot appropriately
-    CGFloat side = tileSize.width * scale * 5.f;
-    CGRect cropRect = CGRectMake(0.f, screenshotSize.height - side, side, side);
-    if (iPadPortrait == type || iPadPortraitRetina == type) {
-        cropRect = CGRectMake(99.f * scale, 354.f * scale, side, side);
-    } else if (iPadLandscape == type || iPadLandscapeRetina == type) {
-        cropRect = CGRectMake(227.f * scale, 184.f * scale, side, side);
+    _side = _tileSize.width * _scale * 5.f;
+    CGRect cropRect = CGRectMake(0.f, screenshotSize.height - _side, _side, _side);
+    if (iPadPortrait == _type || iPadPortraitRetina == _type) {
+        cropRect = CGRectMake(99.f * _scale, 354.f * _scale, _side, _side);
+    } else if (iPadLandscape == _type || iPadLandscapeRetina == _type) {
+        cropRect = CGRectMake(227.f * _scale, 184.f * _scale, _side, _side);
     }
 
     CGImageRef croppedCGImage = CGImageCreateWithImageInRect([_image CGImage], cropRect);
     _croppedImage = [UIImage imageWithCGImage:croppedCGImage];
+
+}
+
+- (BOOL)read {
+
+    unsigned char *colorData = nil;
 
     unsigned char *thresholdData = [ALGImageUtilities thresholdDataForImage:_croppedImage colorData:&colorData];
 
@@ -148,7 +150,7 @@ typedef enum {
     // UIImage *alphabetSheet = [ALGImageUtilities alphabetSheet:tileSize scale:scale debug:YES];
     // unsigned char *alphaThreshold = [ALGImageUtilities thresholdDataForImage:alphabetSheet colorData:nil];
 
-    unsigned char *alphaThreshold = [ALGImageUtilities alphaDataForTileSize:CGSizeMake(tileSize.width * scale, tileSize.height * scale)];
+    unsigned char *alphaThreshold = [ALGImageUtilities alphaDataForTileSize:CGSizeMake(_tileSize.width * _scale, _tileSize.height * _scale)];
 
     /*
     // useful for debugging: write out images to Documents directory
@@ -164,8 +166,8 @@ typedef enum {
      */
 
     NSMutableArray *tmp = [NSMutableArray arrayWithCapacity:25];
-    NSInteger tileWidth = tileSize.width * scale;
-    NSInteger tileHeight = tileSize.height * scale;
+    NSInteger tileWidth = _tileSize.width * _scale;
+    NSInteger tileHeight = _tileSize.height * _scale;
     for (int hh = 0; hh < 25; ++hh) { // tiles
         int high_corr = 0;
         int hit = 0;
