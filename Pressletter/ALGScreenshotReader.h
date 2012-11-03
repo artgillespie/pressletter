@@ -25,6 +25,8 @@ typedef enum {
 
 @interface ALGScreenshotReader : NSObject
 
+@property (nonatomic, readonly) UIImage *croppedImage;
+
 - (id)initWithImage:(UIImage *)image;
 - (BOOL)read;
 - (ALGScreenshotReaderTile *)tileAtRow:(NSInteger)row column:(NSInteger)column;

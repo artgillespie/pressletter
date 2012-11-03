@@ -10,10 +10,10 @@
 
 @implementation ALGImageUtilities
 
-+ (UIImage *)alphabetSheet:(BOOL)debug {
++ (UIImage *)alphabetSheet:(CGSize)tileSize scale:(CGFloat)scale debug:(BOOL)debug {
     NSParameterAssert([NSThread isMainThread]);
-    
-    CGSize tileSize = CGSizeMake(128.f, 128.f);
+    tileSize.width *= scale;
+    tileSize.height *= scale;
     NSInteger numCols = 5;
     NSInteger numRows = ceilf(26. / 5.f);
     CGSize imageSize = CGSizeMake(tileSize.width * numCols, tileSize.height * numRows);
@@ -30,7 +30,7 @@
     // }
     // set font color
     CGContextSetRGBFillColor(ctx, 0.f, 0.f, 0.f, 1.f);
-    CGFloat yOffset = 16.f;
+    CGFloat yOffset = 8.f * scale;
     for (int ii = 0; ii < numRows; ++ii) {
         for (int jj = 0; jj < numCols; ++jj) {
             CGRect tileRect = CGRectMake(jj * tileSize.width, ii * tileSize.height + yOffset, tileSize.width, tileSize.height);
@@ -112,17 +112,18 @@
 
     // now, threshold the entire image (we could save maybe a few cycles by only
     // thresholding the parts we're interested in)
-    unsigned char *thresholdData = (unsigned char*)calloc(height * width, sizeof(unsigned char));
-    memset(thresholdData, 255, height * width);
+    unsigned char *thresholdData = (unsigned char*)calloc(width * height, sizeof(unsigned char));
+    memset(thresholdData, 255, width * height);
 
     unsigned char *rawPtr = rawData;
     unsigned char *threshPtr = thresholdData;
     for (int ii = 0; ii < height; ++ii) {
         for (int jj = 0; jj < width; ++jj) {
-            unsigned char r = *rawPtr++;
-            unsigned char g = *rawPtr++;
-            unsigned char b = *rawPtr++;
-            __unused unsigned char a = *rawPtr++;
+            int idx = (ii * width + jj) * 4;
+            unsigned char r = rawPtr[idx++];
+            unsigned char g = rawPtr[idx++];
+            unsigned char b = rawPtr[idx++];
+            __unused unsigned char a = rawPtr[idx++];
             if (r <= 52 && g <= 52 && b <= 52) {
                 *threshPtr = 0;
             }

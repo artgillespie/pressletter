@@ -9,23 +9,23 @@
 #import "ALGScreenshotReader.h"
 #import "ALGImageUtilities.h"
 
-unsigned char ALGDataForTile(unsigned char *buf, int tile, int x, int y) {
+unsigned char ALGDataForTile(unsigned char *buf, int tile, int x, int y, int side) {
     int tile_row = tile / 5;
     int tile_col = tile % 5;
-    int tile_row_offs = tile_row * 128 * 640;
-    int tile_col_offs = tile_col * 128;
-    int row_offs = y * 640 + tile_row_offs;
+    int tile_row_offs = tile_row * side * 5 * side;
+    int tile_col_offs = tile_col * side;
+    int row_offs = y * 5 * side + tile_row_offs;
     int col_offs = x + tile_col_offs;
     return buf[row_offs + col_offs];
 }
 
-ALGTileColor ALGColorForTile(unsigned char *buf, int tile) {
+ALGTileColor ALGColorForTile(unsigned char *buf, int tile, int side) {
     // sample the color at tile's 10, 10
     int tile_row = tile / 5;
     int tile_col = tile % 5;
-    int tile_row_offs = tile_row * 128 * 640 * 4;
-    int tile_col_offs = tile_col * 128 * 4;
-    int row_offs = 10 * 640 * 4 + tile_row_offs;
+    int tile_row_offs = tile_row * side * side * 5 * 4;
+    int tile_col_offs = tile_col * side * 4;
+    int row_offs = 10 * side * 4 + tile_row_offs;
     int col_offs = 10 * 4 + tile_col_offs;
     unsigned char r = buf[row_offs + col_offs];
     unsigned char g = buf[row_offs + col_offs + 1];
@@ -64,6 +64,7 @@ typedef enum {
 @implementation ALGScreenshotReader {
     __strong UIImage *_image;
     __strong NSArray *_tiles;
+    __strong UIImage *_croppedImage;
 }
 
 - (id)initWithImage:(UIImage *)image {
@@ -75,34 +76,93 @@ typedef enum {
 }
 
 - (BOOL)read {
+    typedef enum {
+        iPhone4,
+        iPhone4Retina,
+        iPhone5,
+        iPadPortrait,
+        iPadPortraitRetina,
+        iPadLandscape,
+        iPadLandscapeRetina
+    } screenshotType;
 
+    CGSize screenshotSize = _image.size;
+    CGSize tileSize = CGSizeMake(64.f, 64.f);
+    CGFloat scale = 2.f;
+    screenshotType type = iPhone5;
+    if (screenshotSize.width == 1024.f) {
+        tileSize = CGSizeMake(114.f, 114.f);
+        scale = 1.f;
+        type = iPadLandscape;
+    } else if (screenshotSize.height == 1024.f) {
+        tileSize = CGSizeMake(114.f, 114.f);
+        scale = 1.f;
+        type = iPadPortrait;
+    } else if (screenshotSize.width == 2048.f) {
+        tileSize = CGSizeMake(114.f, 114.f);
+        scale = 2.f;
+        type = iPadLandscapeRetina;
+    } else if (screenshotSize.height == 2048.f) {
+        tileSize = CGSizeMake(114.f, 114.f);
+        scale = 2.f;
+        type = iPadPortraitRetina;
+    } else if (screenshotSize.width == 320.f) {
+        tileSize = CGSizeMake(64.f, 64.f);
+        type = iPhone4;
+        scale = 1.f;
+    } else if (screenshotSize.height == 960.f) {
+        tileSize = CGSizeMake(64.f, 64.f);
+        type = iPhone4Retina;
+        scale = 2.f;
+    } else if (screenshotSize.height == 1136.f) {
+        tileSize = CGSizeMake(64.f, 64.f);
+        type = iPhone5;
+        scale = 2.f;
+    } else {
+        NSLog(@"NOT A LETTERPRESS SCREENSHOT");
+        return NO;
+    }
     unsigned char *colorData = nil;
-    unsigned char *thresholdData = [ALGImageUtilities thresholdDataForImage:_image colorData:&colorData];
-    unsigned char *alphaThreshold = [ALGImageUtilities thresholdDataForImage:[ALGImageUtilities alphabetSheet:NO] colorData:nil];
+    // crop the screenshot appropriately
+    CGFloat side = tileSize.width * scale * 5.f;
+    CGRect cropRect = CGRectMake(0.f, screenshotSize.height - side, side, side);
+    if (iPadPortrait == type || iPadPortraitRetina == type) {
+        cropRect = CGRectMake(99.f * scale, 354.f * scale, side, side);
+    } else if (iPadLandscape == type || iPadLandscapeRetina == type) {
+        cropRect = CGRectMake(227.f * scale, 184.f * scale, side, side);
+    }
+
+    CGImageRef croppedCGImage = CGImageCreateWithImageInRect([_image CGImage], cropRect);
+    _croppedImage = [UIImage imageWithCGImage:croppedCGImage];
+
+    unsigned char *thresholdData = [ALGImageUtilities thresholdDataForImage:_croppedImage colorData:&colorData];
+    UIImage *alphabetSheet = [ALGImageUtilities alphabetSheet:tileSize scale:scale debug:YES];
+    unsigned char *alphaThreshold = [ALGImageUtilities thresholdDataForImage:alphabetSheet colorData:nil];
 
     NSString *docpath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     if (NO == [[NSFileManager defaultManager] fileExistsAtPath:docpath]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:docpath withIntermediateDirectories:YES attributes:nil error:nil];
     }
-    // [self writeGrayscaleBytes:thresholdData size:_image.size toPath:[docpath stringByAppendingPathComponent:@"thresholdData.png"] error:nil];
-    // [self writeGrayscaleBytes:alphaThreshold size:_image.size toPath:[docpath stringByAppendingPathComponent:@"alphaSheet.png"] error:nil];
-
-    long tileOffset = 640 * 320;
-    if (1136.f == _image.size.height) {
-        tileOffset = 640 * (1136 - 640);
-    }
+    NSData *croppedData = UIImagePNGRepresentation(_croppedImage);
+    [croppedData writeToFile:[docpath stringByAppendingPathComponent:@"croppedImage.png"] options:NSDataWritingAtomic error:nil];
+    NSData *alphaSheet = UIImagePNGRepresentation(alphabetSheet);
+    [alphaSheet writeToFile:[docpath stringByAppendingPathComponent:@"alphabetSheet.png"] options:NSDataWritingAtomic error:nil];
+    [self writeGrayscaleBytes:thresholdData size:_croppedImage.size toPath:[docpath stringByAppendingPathComponent:@"thresholdData.png"] error:nil];
+    [self writeGrayscaleBytes:alphaThreshold size:alphabetSheet.size toPath:[docpath stringByAppendingPathComponent:@"alphaSheet.png"] error:nil];
 
     NSMutableArray *tmp = [NSMutableArray arrayWithCapacity:25];
+    NSInteger tileWidth = tileSize.width * scale;
+    NSInteger tileHeight = tileSize.height * scale;
     for (int hh = 0; hh < 25; ++hh) { // tiles
         int high_corr = 0;
         int hit = 0;
         for (int ii = 0; ii < 26; ++ii) { // letters
             int corr = 0;
-            for (int jj = 30; jj < 80; ++jj) { // rows
-                for (int kk = 30; kk < 80; ++kk) { // cols
-                    unsigned char a = ALGDataForTile(alphaThreshold, ii, kk, jj);
+            for (int jj = 0; jj < tileHeight; ++jj) { // rows
+                for (int kk = 0; kk < tileWidth; ++kk) { // cols
+                    unsigned char a = ALGDataForTile(alphaThreshold, ii, kk, jj, tileWidth);
                     // slide the buffer pointer forward (down) to where the tiles start
-                    unsigned char t = ALGDataForTile(thresholdData + tileOffset, hh, kk, jj);
+                    unsigned char t = ALGDataForTile(thresholdData, hh, kk, jj, tileWidth);
                     if (a == t) {
                         corr++;
                     }
@@ -117,7 +177,7 @@ typedef enum {
         unichar hitChar = 'A' + hit;
         tile.letter = [NSString stringWithCharacters:&hitChar length:1];
         // tile offset * 4 to account for rgba bytes
-        tile.tileColor = ALGColorForTile(colorData + tileOffset * 4, hh);
+        tile.tileColor = ALGColorForTile(colorData, hh, tileWidth);
         [tmp addObject:tile];
     }
     _tiles = [NSArray arrayWithArray:tmp];
@@ -137,6 +197,10 @@ typedef enum {
         [retString appendString:tile.letter];
     }
     return [NSString stringWithString:retString];
+}
+
+- (UIImage *)croppedImage {
+    return _croppedImage;
 }
 
 #pragma mark - Private Debugging Methods

@@ -70,13 +70,13 @@ bool ALGCanSpell(NSString *a, NSString *b) {
 
 - (void)readImage:(UIImage *)image {
     NSParameterAssert([NSThread isMainThread]);
-    self.imageView.image = [UIImage imageWithCGImage:image.CGImage scale:[UIScreen mainScreen].scale orientation:image.imageOrientation];
     ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
     if (NO == [reader read]) {
         NSLog(@"error reading screenshot!");
         return;
     } else {
     }
+    self.imageView.image = reader.croppedImage;
     self.overlayView.screenshotReader = reader;
     __weak ALGViewController *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

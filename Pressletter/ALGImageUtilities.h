@@ -10,7 +10,7 @@
 
 @interface ALGImageUtilities : NSObject
 
-+ (UIImage *)alphabetSheet:(BOOL)debug;
++ (UIImage *)alphabetSheet:(CGSize)size scale:(CGFloat)scale debug:(BOOL)debug;
 + (unsigned char *)thresholdDataForImage:(UIImage *)image colorData:(unsigned char **)colorData;
 + (UIImage *)grayscaleImageForBytes:(unsigned char *)buf size:(CGSize)size error:(NSError **)error;
 
