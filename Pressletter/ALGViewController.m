@@ -48,6 +48,8 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     __strong NSArray *_wordDictionary;
     __strong NSArray *_hitWords;
     NSInteger _hitIndex;
+    // for iPad
+    __strong UIPopoverController *_imagePickerPopover;
 }
 
 - (void)viewDidLoad {
@@ -104,7 +106,12 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     imagePicker.allowsEditing = NO;
     imagePicker.delegate = self;
-    [self presentViewController:imagePicker animated:YES completion:^{}];
+    if (UIUserInterfaceIdiomPad == [UIDevice currentDevice].userInterfaceIdiom) {
+        _imagePickerPopover = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
+        [_imagePickerPopover presentPopoverFromRect:self.chooseButton.bounds inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    } else {
+        [self presentViewController:imagePicker animated:YES completion:^{}];
+    }
 }
 
 - (IBAction)lastPhotoButton:(id)sender {
@@ -142,12 +149,22 @@ bool ALGCanSpell(NSString *a, NSString *b) {
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
+    if (UIUserInterfaceIdiomPad == [UIDevice currentDevice].userInterfaceIdiom) {
+        [_imagePickerPopover dismissPopoverAnimated:YES];
+        _imagePickerPopover = nil;
+    } else {
+        [self dismissViewControllerAnimated:YES completion:^{}];
+    }
     [self readImage:image];
-    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    if (UIUserInterfaceIdiomPad == [UIDevice currentDevice].userInterfaceIdiom) {
+        [_imagePickerPopover dismissPopoverAnimated:YES];
+        _imagePickerPopover = nil;
+    } else {
+        [self dismissViewControllerAnimated:YES completion:^{}];
+    }
 }
 
 - (void)loadDictionary {
