@@ -87,7 +87,7 @@ typedef enum {
     } screenshotType;
 
     CGSize screenshotSize = _image.size;
-    CGSize tileSize = CGSizeMake(64.f, 64.f);
+    CGSize tileSize;
     CGFloat scale = 2.f;
     screenshotType type = iPhone5;
     if (screenshotSize.width == 1024.f) {

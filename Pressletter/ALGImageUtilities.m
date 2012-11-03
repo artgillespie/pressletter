@@ -84,12 +84,18 @@
                                         bitmapInfo,
                                         provider, NULL, NO, renderingIntent);
     if (nil == imageRef) {
+        CGColorSpaceRelease(colorSpace);
+        CGDataProviderRelease(provider);
         if (nil != *error) {
             *error = [NSError errorWithDomain:@"ALGErrorDomain" code:-255 userInfo:@{NSLocalizedDescriptionKey : @"Couldn't create CGImage"}];
         }
         return nil;
     }
-    return [UIImage imageWithCGImage:imageRef];
+    UIImage *retImg = [UIImage imageWithCGImage:imageRef];
+    CGImageRelease(imageRef);
+    CGColorSpaceRelease(colorSpace);
+    CGDataProviderRelease(provider);
+    return retImg;
 }
 
 + (unsigned char *)thresholdDataForImage:(UIImage *)image colorData:(unsigned char **)colorData {
