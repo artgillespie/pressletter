@@ -15,6 +15,8 @@
 		C8D687E316454E6E00F30DF3 /* alphaSheet_114.png in Resources */ = {isa = PBXBuildFile; fileRef = C8D687DD16454A4F00F30DF3 /* alphaSheet_114.png */; };
 		C8D687E416454E7200F30DF3 /* alphaSheet_128.png in Resources */ = {isa = PBXBuildFile; fileRef = C8D687DE16454A4F00F30DF3 /* alphaSheet_128.png */; };
 		C8D687E516454E7500F30DF3 /* alphaSheet_228.png in Resources */ = {isa = PBXBuildFile; fileRef = C8D687DF16454A4F00F30DF3 /* alphaSheet_228.png */; };
+		C8D687E7164552F300F30DF3 /* iPadLandscape_Retina.png in Resources */ = {isa = PBXBuildFile; fileRef = C8D687E6164552F300F30DF3 /* iPadLandscape_Retina.png */; };
+		C8D687E9164552F900F30DF3 /* iPadPortrait_Retina.png in Resources */ = {isa = PBXBuildFile; fileRef = C8D687E8164552F900F30DF3 /* iPadPortrait_Retina.png */; };
 		C8D862BB1643BDD7001B5668 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BA1643BDD7001B5668 /* UIKit.framework */; };
 		C8D862BD1643BDD7001B5668 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BC1643BDD7001B5668 /* Foundation.framework */; };
 		C8D862BF1643BDD7001B5668 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BE1643BDD7001B5668 /* CoreGraphics.framework */; };
@@ -67,6 +69,8 @@
 		C8D687DD16454A4F00F30DF3 /* alphaSheet_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alphaSheet_114.png; sourceTree = "<group>"; };
 		C8D687DE16454A4F00F30DF3 /* alphaSheet_128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alphaSheet_128.png; sourceTree = "<group>"; };
 		C8D687DF16454A4F00F30DF3 /* alphaSheet_228.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alphaSheet_228.png; sourceTree = "<group>"; };
+		C8D687E6164552F300F30DF3 /* iPadLandscape_Retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPadLandscape_Retina.png; sourceTree = "<group>"; };
+		C8D687E8164552F900F30DF3 /* iPadPortrait_Retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPadPortrait_Retina.png; sourceTree = "<group>"; };
 		C8D862B61643BDD7001B5668 /* pressletter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pressletter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8D862BA1643BDD7001B5668 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C8D862BC1643BDD7001B5668 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -219,6 +223,8 @@
 		C8D862F51643BE7B001B5668 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C8D687E8164552F900F30DF3 /* iPadPortrait_Retina.png */,
+				C8D687E6164552F300F30DF3 /* iPadLandscape_Retina.png */,
 				C8D86310164445F6001B5668 /* iPhone_5_1.png */,
 				C8D86311164445F6001B5668 /* iPhone_5_2.png */,
 				C8D862FE1643BF0B001B5668 /* IMG_1384.PNG */,
@@ -345,6 +351,8 @@
 				C8D687E316454E6E00F30DF3 /* alphaSheet_114.png in Resources */,
 				C8D687E416454E7200F30DF3 /* alphaSheet_128.png in Resources */,
 				C8D687E516454E7500F30DF3 /* alphaSheet_228.png in Resources */,
+				C8D687E7164552F300F30DF3 /* iPadLandscape_Retina.png in Resources */,
+				C8D687E9164552F900F30DF3 /* iPadPortrait_Retina.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
