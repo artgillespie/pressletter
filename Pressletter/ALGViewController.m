@@ -73,6 +73,7 @@ bool ALGCanSpell(NSString *a, NSString *b) {
 
 - (void)readImage:(UIImage *)image {
     NSParameterAssert([NSThread isMainThread]);
+    self.hitLabel.text = @"";
     [self.activityIndicator startAnimating];
     ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
     self.imageView.image = reader.croppedImage;
