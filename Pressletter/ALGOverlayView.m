@@ -53,9 +53,7 @@
                 CGContextRef ctx = UIGraphicsGetCurrentContext();
                 CGContextFillEllipseInRect(ctx, tileRect);
             }
-            NSLog(@"_hitWord: %@", _hitWord);
             if (_hitWord && NSNotFound != [_hitWord rangeOfString:tile.letter].location) {
-                NSLog(@"drawing ring around hit word letter!!!");
                 CGContextRef ctx = UIGraphicsGetCurrentContext();
                 CGContextSetLineWidth(ctx, 4.f);
                 CGContextSetRGBStrokeColor(ctx, 1.f, 0.f, 0.f, 0.5);

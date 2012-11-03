@@ -56,6 +56,8 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     UIImage *image = [[UIImage imageNamed:@"UIAlertSheetBlackCancelButton"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 13.f, 0.f, 13.f)];
     [self.chooseButton setBackgroundImage:image forState:UIControlStateNormal];
     [self.lastButton setBackgroundImage:image forState:UIControlStateNormal];
+    UIImage *helpImage = [UIImage imageNamed:@"HelpPlaceholder"];
+    self.imageView.image = helpImage;
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
     [self.hitLabel addGestureRecognizer:tapRecognizer];
     self.hitLabel.userInteractionEnabled = YES;
