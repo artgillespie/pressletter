@@ -58,7 +58,7 @@
 /* Begin PBXFileReference section */
 		C815FC091644890A000EFA3E /* UIAlertSheetBlackCancelButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIAlertSheetBlackCancelButton@2x.png"; sourceTree = "<group>"; };
 		C815FC0C1644954D000EFA3E /* HelpPlaceholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HelpPlaceholder@2x.png"; sourceTree = "<group>"; };
-		C8D862B61643BDD7001B5668 /* Pressletter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pressletter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8D862B61643BDD7001B5668 /* pressletter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pressletter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8D862BA1643BDD7001B5668 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C8D862BC1643BDD7001B5668 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C8D862BE1643BDD7001B5668 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -135,7 +135,7 @@
 		C8D862B71643BDD7001B5668 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C8D862B61643BDD7001B5668 /* Pressletter.app */,
+				C8D862B61643BDD7001B5668 /* pressletter.app */,
 				C8D862DD1643BDD7001B5668 /* PressletterTests.octest */,
 			);
 			name = Products;
@@ -233,9 +233,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C8D862B51643BDD7001B5668 /* Pressletter */ = {
+		C8D862B51643BDD7001B5668 /* pressletter */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C8D862EF1643BDD7001B5668 /* Build configuration list for PBXNativeTarget "Pressletter" */;
+			buildConfigurationList = C8D862EF1643BDD7001B5668 /* Build configuration list for PBXNativeTarget "pressletter" */;
 			buildPhases = (
 				C8D862B21643BDD7001B5668 /* Sources */,
 				C8D862B31643BDD7001B5668 /* Frameworks */,
@@ -245,9 +245,9 @@
 			);
 			dependencies = (
 			);
-			name = Pressletter;
+			name = pressletter;
 			productName = Pressletter;
-			productReference = C8D862B61643BDD7001B5668 /* Pressletter.app */;
+			productReference = C8D862B61643BDD7001B5668 /* pressletter.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C8D862DC1643BDD7001B5668 /* PressletterTests */ = {
@@ -291,7 +291,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C8D862B51643BDD7001B5668 /* Pressletter */,
+				C8D862B51643BDD7001B5668 /* pressletter */,
 				C8D862DC1643BDD7001B5668 /* PressletterTests */,
 			);
 		};
@@ -378,7 +378,7 @@
 /* Begin PBXTargetDependency section */
 		C8D862E31643BDD7001B5668 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = C8D862B51643BDD7001B5668 /* Pressletter */;
+			target = C8D862B51643BDD7001B5668 /* pressletter */;
 			targetProxy = C8D862E21643BDD7001B5668 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -411,6 +411,59 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C815FC0E16449B69000EFA3E /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = "Ad Hoc";
+		};
+		C815FC0F16449B69000EFA3E /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pressletter/Pressletter-Prefix.pch";
+				INFOPLIST_FILE = "Pressletter/Pressletter-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = "Ad Hoc";
+		};
+		C815FC1016449B69000EFA3E /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Pressletter.app/Pressletter";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Pressletter/Pressletter-Prefix.pch";
+				INFOPLIST_FILE = "PressletterTests/PressletterTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = "Ad Hoc";
+		};
 		C8D862ED1643BDD7001B5668 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -422,6 +475,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 3;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -435,6 +489,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -449,6 +504,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 3;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -457,6 +513,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
@@ -526,15 +583,17 @@
 			buildConfigurations = (
 				C8D862ED1643BDD7001B5668 /* Debug */,
 				C8D862EE1643BDD7001B5668 /* Release */,
+				C815FC0E16449B69000EFA3E /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C8D862EF1643BDD7001B5668 /* Build configuration list for PBXNativeTarget "Pressletter" */ = {
+		C8D862EF1643BDD7001B5668 /* Build configuration list for PBXNativeTarget "pressletter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C8D862F01643BDD7001B5668 /* Debug */,
 				C8D862F11643BDD7001B5668 /* Release */,
+				C815FC0F16449B69000EFA3E /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -544,6 +603,7 @@
 			buildConfigurations = (
 				C8D862F31643BDD7001B5668 /* Debug */,
 				C8D862F41643BDD7001B5668 /* Release */,
+				C815FC1016449B69000EFA3E /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
