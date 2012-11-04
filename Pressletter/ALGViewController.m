@@ -114,7 +114,7 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     imagePicker.delegate = self;
     if (UIUserInterfaceIdiomPad == [UIDevice currentDevice].userInterfaceIdiom) {
         _imagePickerPopover = [[UIPopoverController alloc] initWithContentViewController:imagePicker];
-        [_imagePickerPopover presentPopoverFromRect:self.chooseButton.bounds inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        [_imagePickerPopover presentPopoverFromRect:self.chooseButton.bounds inView:self.chooseButton permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     } else {
         [self presentViewController:imagePicker animated:YES completion:^{}];
     }
