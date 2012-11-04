@@ -145,7 +145,7 @@ typedef enum {
 
     unsigned char *colorData = nil;
 
-    unsigned char *thresholdData = [ALGImageUtilities thresholdDataForImage:_croppedImage colorData:&colorData];
+    unsigned char *thresholdData = [ALGImageUtilities thresholdDataForImage:_croppedImage tileSize:CGSizeMake(_tileSize.width * _scale, _tileSize.height * _scale) colorData:&colorData];
 
     // This is how you generate alphabet sheets
     // UIImage *alphabetSheet = [ALGImageUtilities alphabetSheet:tileSize scale:scale debug:YES];
@@ -153,18 +153,16 @@ typedef enum {
 
     unsigned char *alphaThreshold = [ALGImageUtilities alphaDataForTileSize:CGSizeMake(_tileSize.width * _scale, _tileSize.height * _scale)];
 
-    /*
     // useful for debugging: write out images to Documents directory
     NSString *docpath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     if (NO == [[NSFileManager defaultManager] fileExistsAtPath:docpath]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:docpath withIntermediateDirectories:YES attributes:nil error:nil];
     }
-    NSData *croppedData = UIImagePNGRepresentation(_croppedImage);
-    [croppedData writeToFile:[docpath stringByAppendingPathComponent:@"croppedImage.png"] options:NSDataWritingAtomic error:nil];
-    [self writeGrayscaleBytes:thresholdData size:_croppedImage.size toPath:[docpath stringByAppendingPathComponent:@"thresholdData.png"] error:nil];
-    [self writeGrayscaleBytes:alphaThreshold size:CGSizeMake(tileSize.width * scale * 5.f, tileSize.height * scale * 6.f) toPath:[docpath stringByAppendingPathComponent:@"alphaSheet.png"] error:nil];
+    // NSData *croppedData = UIImagePNGRepresentation(_croppedImage);
+    // [croppedData writeToFile:[docpath stringByAppendingPathComponent:@"croppedImage.png"] options:NSDataWritingAtomic error:nil];
+    [self writeGrayscaleBytes:thresholdData size:_croppedImage.size toPath:@"/Users/artgillespie/Desktop/thresholdData.png" error:nil];
+    // [self writeGrayscaleBytes:alphaThreshold size:CGSizeMake(tileSize.width * scale * 5.f, tileSize.height * scale * 6.f) toPath:[docpath stringByAppendingPathComponent:@"alphaSheet.png"] error:nil];
     // [self writeGrayscaleCache:alphaThreshold size:alphabetSheet.size toPath:[docpath stringByAppendingPathComponent:[NSString stringWithFormat:@"alpha_%d.thrsh", (int)(tileSize.width * scale)]] error:nil];
-     */
 
     NSMutableArray *tmp = [NSMutableArray arrayWithCapacity:25];
     NSInteger tileWidth = _tileSize.width * _scale;
@@ -191,8 +189,9 @@ typedef enum {
         ALGScreenshotReaderTile *tile = [[ALGScreenshotReaderTile alloc] init];
         unichar hitChar = 'A' + hit;
         tile.letter = [NSString stringWithCharacters:&hitChar length:1];
-        // tile offset * 4 to account for rgba bytes
-        tile.tileColor = ALGColorForTile(colorData, hh, tileWidth);
+        // TOOD: [alg] When we added support for all themes, this pretty much
+        // became useless. Have to revisit color. Tedious!
+        // tile.tileColor = ALGColorForTile(colorData, hh, tileWidth);
         [tmp addObject:tile];
     }
     _tiles = [NSArray arrayWithArray:tmp];

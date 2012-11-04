@@ -69,7 +69,7 @@
     @[@"A", @"O", @"T", @"N", @"W"],
     ];
 
-    ALGTileColor colors[] = {ALGTileColorDarkBlue, ALGTileColorBlue, ALGTileColorBlue, ALGTileColorRed, ALGTileColorBlue,
+    __unused ALGTileColor colors[] = {ALGTileColorDarkBlue, ALGTileColorBlue, ALGTileColorBlue, ALGTileColorRed, ALGTileColorBlue,
                              ALGTileColorBlue, ALGTileColorRed, ALGTileColorBlue, ALGTileColorBlue, ALGTileColorBlue,
                              ALGTileColorRed, ALGTileColorBlue, ALGTileColorBlue, ALGTileColorRed, ALGTileColorRed,
                              ALGTileColorDarkRed, ALGTileColorRed, ALGTileColorBlue, ALGTileColorRed, ALGTileColorDarkRed,
@@ -79,7 +79,8 @@
         for (int jj = 0; jj < 5; ++jj) { // column
             ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
             STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
-            STAssertTrue(colors[ii * 5 + jj] == tile.tileColor, @"Unexpected tile color: %d != %d", colors[ii * 5 + jj], tile.tileColor);
+            // TODO: We've removed support for color detection.
+            // STAssertTrue(colors[ii * 5 + jj] == tile.tileColor, @"Unexpected tile color: %d != %d", colors[ii * 5 + jj], tile.tileColor);
         }
     }
 }
@@ -227,6 +228,162 @@
     @[@"R", @"O", @"A", @"V", @"G"],
     @[@"H", @"S", @"H", @"L", @"Y"],
     ];
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+        }
+    }
+}
+
+- (void)testColorTheme_Pop {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPhone4_Pop" ofType:@"png"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"T", @"O", @"S", @"L", @"F"],
+    @[@"N", @"D", @"H", @"T", @"L"],
+    @[@"X", @"G", @"S", @"W", @"G"],
+    @[@"R", @"P", @"R", @"A", @"K"],
+    @[@"L", @"P", @"A", @"Z", @"K"],
+    ];
+    
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+        }
+    }    
+}
+
+- (void)testColorTheme_Retro {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPhone4_Retro" ofType:@"png"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"T", @"O", @"S", @"L", @"F"],
+    @[@"N", @"D", @"H", @"T", @"L"],
+    @[@"X", @"G", @"S", @"W", @"G"],
+    @[@"R", @"P", @"R", @"A", @"K"],
+    @[@"L", @"P", @"A", @"Z", @"K"],
+    ];
+
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+        }
+    }
+}
+
+- (void)testColorTheme_Pink {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPhone4_Pink" ofType:@"png"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"T", @"O", @"S", @"L", @"F"],
+    @[@"N", @"D", @"H", @"T", @"L"],
+    @[@"X", @"G", @"S", @"W", @"G"],
+    @[@"R", @"P", @"R", @"A", @"K"],
+    @[@"L", @"P", @"A", @"Z", @"K"],
+    ];
+
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+        }
+    }
+}
+
+- (void)testColorTheme_Glow {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPhone4_Glow" ofType:@"png"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"T", @"O", @"S", @"L", @"F"],
+    @[@"N", @"D", @"H", @"T", @"L"],
+    @[@"X", @"G", @"S", @"W", @"G"],
+    @[@"R", @"P", @"R", @"A", @"K"],
+    @[@"L", @"P", @"A", @"Z", @"K"],
+    ];
+
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+        }
+    }
+}
+
+- (void)testColorTheme_Forest {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPhone4_Forest" ofType:@"png"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"T", @"O", @"S", @"L", @"F"],
+    @[@"N", @"D", @"H", @"T", @"L"],
+    @[@"X", @"G", @"S", @"W", @"G"],
+    @[@"R", @"P", @"R", @"A", @"K"],
+    @[@"L", @"P", @"A", @"Z", @"K"],
+    ];
+
+    for (int ii = 0; ii < 5; ++ii) { // row
+        for (int jj = 0; jj < 5; ++jj) { // column
+            ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];
+            STAssertTrue([expected[ii][jj] isEqualToString:tile.letter], @"Unexpected letter at %d, %d (%@ != %@)", ii, jj, expected[ii][jj], tile.letter);
+        }
+    }
+}
+
+- (void)testColorTheme_Dark {
+    NSString *imagePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"iPhone4_Dark" ofType:@"png"];
+    STAssertNotNil(imagePath, @"Expected Image Path");
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    STAssertNotNil(image, @"Expected image");
+    ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
+    if(NO == [reader read]) {
+        STFail(@"[reader read] returned NO");
+        return;
+    }
+    NSArray *expected = @[
+    @[@"T", @"O", @"S", @"L", @"F"],
+    @[@"N", @"D", @"H", @"T", @"L"],
+    @[@"X", @"G", @"S", @"W", @"G"],
+    @[@"R", @"P", @"R", @"A", @"K"],
+    @[@"L", @"P", @"A", @"Z", @"K"],
+    ];
+
     for (int ii = 0; ii < 5; ++ii) { // row
         for (int jj = 0; jj < 5; ++jj) { // column
             ALGScreenshotReaderTile *tile = [reader tileAtRow:ii column:jj];

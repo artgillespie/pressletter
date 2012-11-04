@@ -8,6 +8,31 @@
 
 #import "ALGImageUtilities.h"
 
+// set grayscale byte at tile's x, y given tile of size (side, side)
+void ALGSetDataForTile(unsigned char *buf, int tile, int x, int y, int side, unsigned char val) {
+    int tile_row = tile / 5;
+    int tile_col = tile % 5;
+    int tile_row_offs = tile_row * side * 5 * side;
+    int tile_col_offs = tile_col * side;
+    int row_offs = y * 5 * side + tile_row_offs;
+    int col_offs = x + tile_col_offs;
+    buf[row_offs + col_offs] = val;
+}
+
+// returns grayscale for point in tile
+unsigned char ALGGrayscaleForTileAtPoint(unsigned char *buf, int tile, int x, int y, int side) {
+    int tile_row = tile / 5;
+    int tile_col = tile % 5;
+    int tile_row_offs = tile_row * side * side * 5 * 4;
+    int tile_col_offs = tile_col * side * 4;
+    int row_offs = y * side * 4 * 5 + tile_row_offs;
+    int col_offs = x * 4 + tile_col_offs;
+    unsigned char r = buf[row_offs + col_offs];
+    unsigned char g = buf[row_offs + col_offs + 1];
+    unsigned char b = buf[row_offs + col_offs + 2];
+    return (r + g + b) / 3;
+}
+
 @implementation ALGImageUtilities
 
 + (UIImage *)alphabetSheet:(CGSize)tileSize scale:(CGFloat)scale debug:(BOOL)debug {
@@ -107,7 +132,7 @@
     return retImg;
 }
 
-+ (unsigned char *)thresholdDataForImage:(UIImage *)image colorData:(unsigned char **)colorData {
++ (unsigned char *)thresholdDataForImage:(UIImage *)image tileSize:(CGSize)tileSize colorData:(unsigned char **)colorData {
     CGImageRef imageRef = [image CGImage];
     NSUInteger width = CGImageGetWidth(imageRef);
     NSUInteger height = CGImageGetHeight(imageRef);
@@ -129,19 +154,27 @@
     unsigned char *thresholdData = (unsigned char*)calloc(width * height, sizeof(unsigned char));
     memset(thresholdData, 255, width * height);
 
-    unsigned char *rawPtr = rawData;
-    unsigned char *threshPtr = thresholdData;
-    for (int ii = 0; ii < height; ++ii) {
-        for (int jj = 0; jj < width; ++jj) {
-            int idx = (ii * width + jj) * 4;
-            unsigned char r = rawPtr[idx++];
-            unsigned char g = rawPtr[idx++];
-            unsigned char b = rawPtr[idx++];
-            __unused unsigned char a = rawPtr[idx++];
-            if (r <= 52 && g <= 52 && b <= 52) {
-                *threshPtr = 0;
+    for (int hh = 0; hh < 25; ++hh) {
+        int avgAccumulator = 0;
+        unsigned char bg_avg = 0;
+        for (int ii = 0; ii < tileSize.height; ++ii) {
+            for (int jj = 0; jj < tileSize.width; ++jj) {
+                unsigned char gs = ALGGrayscaleForTileAtPoint(rawData, hh, jj, ii, tileSize.width);
+                if (1 >= ii) {
+                    avgAccumulator += gs;
+                } else {
+                    if (bg_avg < 50 && gs > 80) {
+                        ALGSetDataForTile(thresholdData, hh, jj, ii, tileSize.width, 0);
+                    } else if (bg_avg > 200 && gs < 170) {
+                        ALGSetDataForTile(thresholdData, hh, jj, ii, tileSize.width, 0);
+                    } else if (gs > bg_avg + 30 || gs < bg_avg - 30) {
+                        ALGSetDataForTile(thresholdData, hh, jj, ii, tileSize.width, 0);
+                    }
+                }
             }
-            threshPtr++;
+            if (1 == ii) {
+                bg_avg = avgAccumulator / (2 * tileSize.width);
+            }
         }
     }
     if (NULL != colorData) {

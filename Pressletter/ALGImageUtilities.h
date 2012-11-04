@@ -14,7 +14,7 @@
  * Generates an alphaSheet
  */
 + (UIImage *)alphabetSheet:(CGSize)size scale:(CGFloat)scale debug:(BOOL)debug;
-+ (unsigned char *)thresholdDataForImage:(UIImage *)image colorData:(unsigned char **)colorData;
++ (unsigned char *)thresholdDataForImage:(UIImage *)image tileSize:(CGSize)tileSize colorData:(unsigned char **)colorData;
 
 /*
  * Loads a cached alphaSheet's threshold data. Returns nil if it can't find the correct sheet for
