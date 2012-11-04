@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *chooseButton;
 @property (weak, nonatomic) IBOutlet UIButton *lastButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UILabel *hitCountLabel;
 @property (weak, nonatomic) UIImageView *defaultView; // fade on launch
 @end
 
@@ -81,6 +82,8 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
     [self.hitLabel addGestureRecognizer:tapRecognizer];
     self.hitLabel.userInteractionEnabled = YES;
+    self.hitLabel.text = @"";
+    self.hitCountLabel.text = @"";
     [self setupDefaultView];
 }
 
@@ -107,6 +110,7 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     NSParameterAssert([NSThread isMainThread]);
     self.overlayView.screenshotReader = nil;
     self.hitLabel.text = @"";
+    self.hitCountLabel.text = @"";
     [self.activityIndicator startAnimating];
     ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
     self.imageView.image = reader.croppedImage;
@@ -221,12 +225,22 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     }
     self.overlayView.hitWord = _hitWords[_hitIndex];
     self.hitLabel.text = [_hitWords[_hitIndex] uppercaseString];
+    self.hitCountLabel.text = [NSString stringWithFormat:@"%d/%d", _hitIndex + 1, [_hitWords count]];
 }
 
 - (void)labelTapped:(UITapGestureRecognizer *)gestureRecognizer {
-    _hitIndex++;
-    if (_hitIndex >= [_hitWords count]) {
-        _hitIndex = 0;
+    CGPoint loc = [gestureRecognizer locationInView:self.hitLabel];
+    if (loc.x > self.view.bounds.size.width / 2.f) {
+        _hitIndex++;
+        if (_hitIndex >= [_hitWords count]) {
+            _hitIndex = 0;
+        }
+    } else {
+        if (0 == _hitIndex) {
+            _hitIndex = [_hitWords count] - 1;
+        } else {
+            _hitIndex--;
+        }
     }
     [self updateHitLabel];
 }
