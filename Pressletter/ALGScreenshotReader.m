@@ -160,7 +160,7 @@ typedef enum {
     }
     // NSData *croppedData = UIImagePNGRepresentation(_croppedImage);
     // [croppedData writeToFile:[docpath stringByAppendingPathComponent:@"croppedImage.png"] options:NSDataWritingAtomic error:nil];
-    [self writeGrayscaleBytes:thresholdData size:_croppedImage.size toPath:@"/Users/artgillespie/Desktop/thresholdData.png" error:nil];
+    // [self writeGrayscaleBytes:thresholdData size:_croppedImage.size toPath:@"/Users/artgillespie/Desktop/thresholdData.png" error:nil];
     // [self writeGrayscaleBytes:alphaThreshold size:CGSizeMake(tileSize.width * scale * 5.f, tileSize.height * scale * 6.f) toPath:[docpath stringByAppendingPathComponent:@"alphaSheet.png"] error:nil];
     // [self writeGrayscaleCache:alphaThreshold size:alphabetSheet.size toPath:[docpath stringByAppendingPathComponent:[NSString stringWithFormat:@"alpha_%d.thrsh", (int)(tileSize.width * scale)]] error:nil];
 
