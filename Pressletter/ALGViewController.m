@@ -125,7 +125,7 @@ bool ALGCanSpell(NSString *a, NSString *b) {
             if (true == ALGCanSpell(word, compareString)) {
                 [hits addObject:word];
                 hitCount++;
-                if (hitCount > 30)
+                if (hitCount > 40)
                     break;
             }
         }
