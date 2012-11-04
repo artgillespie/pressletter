@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *chooseButton;
 @property (weak, nonatomic) IBOutlet UIButton *lastButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) UIImageView *defaultView; // fade on launch
 @end
 
 // can we spell a with non-repeating instances of the characters in b?
@@ -53,6 +54,22 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     __strong UIPopoverController *_imagePickerPopover;
 }
 
+- (void)setupDefaultView {
+    CGSize selfSize = [UIScreen mainScreen].bounds.size;
+    UIImageView *defaultView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, selfSize.width, selfSize.height)];
+    defaultView.contentMode = UIViewContentModeTop;
+    // which image should we use?
+    if (1024.f == selfSize.height && 768.f == selfSize.width) {
+        defaultView.image = [UIImage imageNamed:@"Default"];
+    } else if (480.f == selfSize.height) {
+        defaultView.image = [UIImage imageNamed:@"Default"];
+    } else if (568.f == selfSize.height) {
+        defaultView.image = [UIImage imageNamed:@"Default-568h"];
+    }
+    [self.view addSubview:defaultView];
+    self.defaultView = defaultView;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self loadDictionary];
@@ -64,6 +81,21 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
     [self.hitLabel addGestureRecognizer:tapRecognizer];
     self.hitLabel.userInteractionEnabled = YES;
+    [self setupDefaultView];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    if (nil == self.defaultView)
+        return;
+    [UIView animateWithDuration:.5 animations:^{
+        CGRect f = self.defaultView.frame;
+        f.origin.y -= f.size.height;
+        self.defaultView.frame = f;
+        self.defaultView.alpha = 0.f;
+    } completion:^(BOOL finished) {
+        [self.defaultView removeFromSuperview];
+        self.defaultView = nil;
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
