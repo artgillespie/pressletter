@@ -26,9 +26,12 @@
         return;
     }
     BOOL colorDebug = NO;
+    CGFloat scale = [UIScreen mainScreen].scale;
     for (int ii = 0; ii < 5; ++ii) { // rows
         for (int jj = 0; jj < 5; ++jj) {
             CGRect tileRect = CGRectMake(jj * 64.f, ii * 64.f, 64.f, 64.f);
+            CGRect insetRect = CGRectInset(tileRect, 3.f * scale, 3.f * scale);
+;
             ALGScreenshotReaderTile *tile = [_screenshotReader tileAtRow:ii column:jj];
             [[UIColor blackColor] set];
             [tile.letter drawInRect:tileRect withFont:[UIFont boldSystemFontOfSize:14.f]];
@@ -57,7 +60,7 @@
                 CGContextRef ctx = UIGraphicsGetCurrentContext();
                 CGContextSetLineWidth(ctx, 4.f);
                 CGContextSetRGBStrokeColor(ctx, 1.f, 0.f, 0.f, 0.5);
-                CGContextStrokeEllipseInRect(ctx, tileRect);
+                CGContextStrokeEllipseInRect(ctx, insetRect);
             }
         }
     }
