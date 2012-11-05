@@ -12,19 +12,6 @@
 
 #import <AssetsLibrary/AssetsLibrary.h>
 
-@interface ALGViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet ALGOverlayView *overlayView;
-@property (weak, nonatomic) IBOutlet UILabel *hitLabel;
-@property (weak, nonatomic) IBOutlet UIButton *chooseButton;
-@property (weak, nonatomic) IBOutlet UIButton *lastButton;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (weak, nonatomic) IBOutlet UILabel *hitCountLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *leftArrowImageView;
-@property (weak, nonatomic) IBOutlet UIImageView *rightArrowImageView;
-@property (weak, nonatomic) UIImageView *defaultView; // fade on launch
-@end
-
 // can we spell a with non-repeating instances of the characters in b?
 bool ALGCanSpell(NSString *a, NSString *b) {
     const char *aStr = [a cStringUsingEncoding:NSUTF8StringEncoding];
@@ -48,6 +35,53 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     }
     return true;
 }
+
+NSArray *ALGLoadWordList(NSString *path) {
+    NSError *error = nil;
+    NSString *fileContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+    if (nil == fileContents) {
+        NSCAssert(NO, @"Couldn't load fileContents: %@", error);
+    }
+    return [fileContents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+}
+
+/*
+ * Get the cache directory, creating it if necessary.
+ */
+NSString *ALGGetCachePath() {
+    NSString *libraryPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
+    NSString *cachePath = [libraryPath stringByAppendingPathComponent:@"com.tapsquare.pressletter/"];
+    [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
+    return cachePath;
+}
+
+NSArray *ALGGetCachedHits(NSString *boardString) {
+    NSString *cachePath = ALGGetCachePath();
+    NSString *boardPath = [cachePath stringByAppendingPathComponent:[boardString stringByAppendingPathExtension:@"txt"]];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:boardPath]) {
+        return [NSArray arrayWithContentsOfFile:boardPath];
+    }
+    return nil;
+}
+
+BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
+    NSString *cachePath = ALGGetCachePath();
+    NSString *boardPath = [cachePath stringByAppendingPathComponent:[boardString stringByAppendingPathExtension:@"txt"]];
+    return [hits writeToFile:boardPath atomically:YES];
+}
+
+@interface ALGViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet ALGOverlayView *overlayView;
+@property (weak, nonatomic) IBOutlet UILabel *hitLabel;
+@property (weak, nonatomic) IBOutlet UIButton *chooseButton;
+@property (weak, nonatomic) IBOutlet UIButton *lastButton;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UILabel *hitCountLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *leftArrowImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *rightArrowImageView;
+@property (weak, nonatomic) UIImageView *defaultView; // fade on launch
+@end
 
 @implementation ALGViewController {
     __strong NSArray *_wordDictionary;
@@ -80,7 +114,6 @@ bool ALGCanSpell(NSString *a, NSString *b) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self loadDictionary];
     UIImage *image = [[UIImage imageNamed:@"UIAlertSheetBlackCancelButton"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 13.f, 0.f, 13.f)];
     [self.chooseButton setBackgroundImage:image forState:UIControlStateNormal];
     [self.lastButton setBackgroundImage:image forState:UIControlStateNormal];
@@ -137,6 +170,28 @@ bool ALGCanSpell(NSString *a, NSString *b) {
         } else {
         }
         NSString *compareString = [[reader stringForTiles] lowercaseString];
+        // see if we have a cached word list for this board
+        NSArray *wordList = ALGGetCachedHits(compareString);
+        if (nil != wordList && 0 != [wordList count]) {
+            // if we have a cached word list, just load it
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.overlayView.screenshotReader = reader;
+                _hitWords = [NSArray arrayWithArray:wordList];
+                _hitIndex = 0;
+                [weakSelf updateHitLabel];
+                self.leftArrowImageView.hidden = NO;
+                self.rightArrowImageView.hidden = NO;
+                [self.activityIndicator stopAnimating];
+            });
+            return;
+        }
+
+        if (nil == _wordDictionary) {
+            // if the word dictionary isn't loaded, grab it
+            NSString *dictionaryPath = [[NSBundle mainBundle] pathForResource:@"dict_long_to_short.txt" ofType:nil];
+            _wordDictionary = ALGLoadWordList(dictionaryPath);
+        }
+
         NSMutableArray *hits = [NSMutableArray arrayWithCapacity:1024];
         NSInteger hitCount = 0;
         for (NSString *word in _wordDictionary) {
@@ -164,6 +219,14 @@ bool ALGCanSpell(NSString *a, NSString *b) {
                     });
                 }
             }
+        } // for (NSString *word in _wordDictionary)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.overlayView.screenshotReader = reader;
+            _hitWords = [NSArray arrayWithArray:hits];
+            [weakSelf updateHitLabel];
+        });
+        if(NO == ALGCacheHits(compareString, [NSArray arrayWithArray:hits])) {
+            NSLog(@"WTF COULDN'T SAVE CACHE...");
         }
     });
 }
@@ -234,15 +297,6 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     }
 }
 
-- (void)loadDictionary {
-    NSString *dictionaryPath = [[NSBundle mainBundle] pathForResource:@"dict_long_to_short.txt" ofType:nil];
-    NSError *error = nil;
-    NSString *fileContents = [NSString stringWithContentsOfFile:dictionaryPath encoding:NSUTF8StringEncoding error:&error];
-    if (nil == fileContents) {
-        NSAssert(NO, @"Couldn't load fileContents: %@", error);
-    }
-    _wordDictionary = [fileContents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-}
 
 - (void)updateHitLabel {
     if (nil == _hitWords) {
