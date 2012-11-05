@@ -1,5 +1,4 @@
 * First-time launch help.
-* Make it appear as "Pressletter" on Springboard.
 * Detect when we've loaded a non-Letterpress image and say something nice...
 * Word animation (when tapping on suggested word label)
 * It'd be nice to offer to delete the screenshot. (Not sure we can do this...)
