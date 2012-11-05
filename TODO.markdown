@@ -1,7 +1,7 @@
-* Launch Animation (slide or fade text and buttons in)
-* We need left/right buttons for tapping through suggested words.
-* Word animation (when tapping on suggested word label)
 * First-time launch help.
+* Make it appear as "Pressletter" on Springboard.
+* Detect when we've loaded a non-Letterpress image and say something nice...
+* Word animation (when tapping on suggested word label)
 * It'd be nice to offer to delete the screenshot. (Not sure we can do this...)
 
 * Point evaluation and scoring. For each word we find, evaluate the score

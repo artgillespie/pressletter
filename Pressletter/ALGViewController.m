@@ -20,6 +20,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *lastButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UILabel *hitCountLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *leftArrowImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *rightArrowImageView;
 @property (weak, nonatomic) UIImageView *defaultView; // fade on launch
 @end
 
@@ -84,6 +86,8 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     self.hitLabel.userInteractionEnabled = YES;
     self.hitLabel.text = @"";
     self.hitCountLabel.text = @"";
+    self.leftArrowImageView.hidden = YES;
+    self.rightArrowImageView.hidden = YES;
     [self setupDefaultView];
 }
 
@@ -111,6 +115,8 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     self.overlayView.screenshotReader = nil;
     self.hitLabel.text = @"";
     self.hitCountLabel.text = @"";
+    self.leftArrowImageView.hidden = YES;
+    self.rightArrowImageView.hidden = YES;
     [self.activityIndicator startAnimating];
     ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
     self.imageView.image = reader.croppedImage;
@@ -138,6 +144,8 @@ bool ALGCanSpell(NSString *a, NSString *b) {
             _hitWords = [NSArray arrayWithArray:hits];
             _hitIndex = 0;
             [weakSelf updateHitLabel];
+            self.leftArrowImageView.hidden = NO;
+            self.rightArrowImageView.hidden = NO;
             [self.activityIndicator stopAnimating];
         });
     });
