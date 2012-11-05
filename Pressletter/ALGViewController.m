@@ -88,6 +88,9 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     self.imageView.image = helpImage;
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
     [self.hitLabel addGestureRecognizer:tapRecognizer];
+    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelDoubleTapped:)];
+    doubleTapRecognizer.numberOfTapsRequired = 2;
+    [self.hitLabel addGestureRecognizer:doubleTapRecognizer];
     self.hitLabel.userInteractionEnabled = YES;
     self.hitLabel.text = @"";
     self.hitCountLabel.text = @"";
@@ -137,22 +140,31 @@ bool ALGCanSpell(NSString *a, NSString *b) {
         NSMutableArray *hits = [NSMutableArray arrayWithCapacity:1024];
         NSInteger hitCount = 0;
         for (NSString *word in _wordDictionary) {
+            if ([word isEqualToString:@""]) {
+                continue;
+            }
             if (true == ALGCanSpell(word, compareString)) {
                 [hits addObject:word];
                 hitCount++;
-                if (hitCount > 40)
-                    break;
+                if (1 == hitCount) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        self.overlayView.screenshotReader = reader;
+                        _hitWords = [NSArray arrayWithArray:hits];
+                        _hitIndex = 0;
+                        [weakSelf updateHitLabel];
+                        self.leftArrowImageView.hidden = NO;
+                        self.rightArrowImageView.hidden = NO;
+                        [self.activityIndicator stopAnimating];
+                    });
+                } else if (0 == hitCount % 10) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        self.overlayView.screenshotReader = reader;
+                        _hitWords = [NSArray arrayWithArray:hits];
+                        [weakSelf updateHitLabel];
+                    });
+                }
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.overlayView.screenshotReader = reader;
-            _hitWords = [NSArray arrayWithArray:hits];
-            _hitIndex = 0;
-            [weakSelf updateHitLabel];
-            self.leftArrowImageView.hidden = NO;
-            self.rightArrowImageView.hidden = NO;
-            [self.activityIndicator stopAnimating];
-        });
     });
 }
 
@@ -255,6 +267,11 @@ bool ALGCanSpell(NSString *a, NSString *b) {
             _hitIndex--;
         }
     }
+    [self updateHitLabel];
+}
+
+- (void)labelDoubleTapped:(UITapGestureRecognizer *)gestureRecognizer {
+    _hitIndex = 0;
     [self updateHitLabel];
 }
 
