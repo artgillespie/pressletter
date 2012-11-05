@@ -57,16 +57,21 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     __strong UIPopoverController *_imagePickerPopover;
 }
 
+/*
+ * The default image view provides us with a nice animation from Default.png
+ * to our UI.
+ */
 - (void)setupDefaultView {
     CGSize selfSize = [UIScreen mainScreen].bounds.size;
+    selfSize.height -= 20.f;
     UIImageView *defaultView = [[UIImageView alloc] initWithFrame:CGRectMake(0.f, 0.f, selfSize.width, selfSize.height)];
-    defaultView.contentMode = UIViewContentModeTop;
+    defaultView.contentMode = UIViewContentModeBottom;
     // which image should we use?
-    if (1024.f == selfSize.height && 768.f == selfSize.width) {
+    if (1004.f == selfSize.height && 768.f == selfSize.width) {
         defaultView.image = [UIImage imageNamed:@"Default"];
-    } else if (480.f == selfSize.height) {
+    } else if (460.f == selfSize.height) {
         defaultView.image = [UIImage imageNamed:@"Default"];
-    } else if (568.f == selfSize.height) {
+    } else if (548.f == selfSize.height) {
         defaultView.image = [UIImage imageNamed:@"Default-568h"];
     }
     [self.view addSubview:defaultView];
