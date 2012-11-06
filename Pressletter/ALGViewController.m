@@ -113,38 +113,7 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
     self.defaultView = defaultView;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    UIImage *image = [[UIImage imageNamed:@"UIAlertSheetBlackCancelButton"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 13.f, 0.f, 13.f)];
-    [self.chooseButton setBackgroundImage:image forState:UIControlStateNormal];
-    [self.lastButton setBackgroundImage:image forState:UIControlStateNormal];
-    UIImage *helpImage = [UIImage imageNamed:@"HelpPlaceholder"];
-    self.imageView.image = helpImage;
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
-    [self.hitLabel addGestureRecognizer:tapRecognizer];
-    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelDoubleTapped:)];
-    doubleTapRecognizer.numberOfTapsRequired = 2;
-    [self.hitLabel addGestureRecognizer:doubleTapRecognizer];
-    self.hitLabel.userInteractionEnabled = YES;
-    self.hitLabel.text = @"";
-    self.hitCountLabel.text = @"";
-    self.leftArrowImageView.hidden = YES;
-    self.rightArrowImageView.hidden = YES;
-    [self setupDefaultView];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    if (nil == self.defaultView)
-        return;
-    [UIView animateWithDuration:.5 animations:^{
-        CGRect f = self.defaultView.frame;
-        f.origin.y -= f.size.height;
-        self.defaultView.frame = f;
-        self.defaultView.alpha = 0.f;
-    } completion:^(BOOL finished) {
-        [self.defaultView removeFromSuperview];
-        self.defaultView = nil;
-    }];
+- (void)setupHitLabel2 {
     // setup the 'back' hit label
     UILabel *hitLabel2 = [[UILabel alloc] initWithFrame:self.hitLabel.frame];
     hitLabel2.userInteractionEnabled = YES;
@@ -163,6 +132,41 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
     hitLabel2.hidden = YES;
     [self.view insertSubview:hitLabel2 belowSubview:self.leftArrowImageView];
     self.hitLabel2 = hitLabel2;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    UIImage *image = [[UIImage imageNamed:@"UIAlertSheetBlackCancelButton"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 13.f, 0.f, 13.f)];
+    [self.chooseButton setBackgroundImage:image forState:UIControlStateNormal];
+    [self.lastButton setBackgroundImage:image forState:UIControlStateNormal];
+    UIImage *helpImage = [UIImage imageNamed:@"HelpPlaceholder"];
+    self.imageView.image = helpImage;
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
+    [self.hitLabel addGestureRecognizer:tapRecognizer];
+    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelDoubleTapped:)];
+    doubleTapRecognizer.numberOfTapsRequired = 2;
+    [self.hitLabel addGestureRecognizer:doubleTapRecognizer];
+    self.hitLabel.userInteractionEnabled = YES;
+    self.hitLabel.text = @"";
+    self.hitCountLabel.text = @"";
+    self.leftArrowImageView.hidden = YES;
+    self.rightArrowImageView.hidden = YES;
+    [self setupDefaultView];
+    [self setupHitLabel2];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    if (nil == self.defaultView)
+        return;
+    [UIView animateWithDuration:.5 animations:^{
+        CGRect f = self.defaultView.frame;
+        f.origin.y -= f.size.height;
+        self.defaultView.frame = f;
+        self.defaultView.alpha = 0.f;
+    } completion:^(BOOL finished) {
+        [self.defaultView removeFromSuperview];
+        self.defaultView = nil;
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
