@@ -74,6 +74,7 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet ALGOverlayView *overlayView;
 @property (weak, nonatomic) IBOutlet UILabel *hitLabel;
+@property (strong, nonatomic) UILabel *hitLabel2;
 @property (weak, nonatomic) IBOutlet UIButton *chooseButton;
 @property (weak, nonatomic) IBOutlet UIButton *lastButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -144,6 +145,24 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
         [self.defaultView removeFromSuperview];
         self.defaultView = nil;
     }];
+    // setup the 'back' hit label
+    UILabel *hitLabel2 = [[UILabel alloc] initWithFrame:self.hitLabel.frame];
+    hitLabel2.userInteractionEnabled = YES;
+    hitLabel2.contentMode = self.hitLabel.contentMode;
+    hitLabel2.textAlignment = self.hitLabel.textAlignment;
+    hitLabel2.font = self.hitLabel.font;
+    hitLabel2.textColor = self.hitLabel.textColor;
+    hitLabel2.clearsContextBeforeDrawing = YES;
+    hitLabel2.backgroundColor = self.hitLabel.backgroundColor;
+    hitLabel2.opaque = self.hitLabel.opaque;
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
+    [hitLabel2 addGestureRecognizer:tapRecognizer];
+    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelDoubleTapped:)];
+    doubleTapRecognizer.numberOfTapsRequired = 2;
+    [hitLabel2 addGestureRecognizer:doubleTapRecognizer];
+    hitLabel2.hidden = YES;
+    [self.view insertSubview:hitLabel2 belowSubview:self.leftArrowImageView];
+    self.hitLabel2 = hitLabel2;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -308,7 +327,8 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
 }
 
 - (void)labelTapped:(UITapGestureRecognizer *)gestureRecognizer {
-    CGPoint loc = [gestureRecognizer locationInView:self.hitLabel];
+    CGPoint loc = [gestureRecognizer locationInView:gestureRecognizer.view];
+    int direction = 1;
     if (loc.x > self.view.bounds.size.width / 2.f) {
         _hitIndex++;
         if (_hitIndex >= [_hitWords count]) {
@@ -320,8 +340,34 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
         } else {
             _hitIndex--;
         }
+        direction = -1;
     }
-    [self updateHitLabel];
+    self.overlayView.hitWord = _hitWords[_hitIndex];
+    CGRect f = self.hitLabel.frame;
+    f.origin.x = direction * self.view.bounds.size.width;
+    self.hitLabel2.frame = f;
+    self.hitLabel2.text = [_hitWords[_hitIndex] uppercaseString];
+    self.hitLabel2.hidden = NO;
+    [self.hitLabel2 setNeedsDisplay];
+    self.hitLabel2.userInteractionEnabled = NO;
+    self.hitLabel.userInteractionEnabled = NO;
+    __weak ALGViewController *weakSelf = self;
+    [UIView animateWithDuration:.25f animations:^{
+        CGRect f = weakSelf.hitLabel2.frame;
+        f.origin.x = 0;
+        weakSelf.hitLabel2.frame = f;
+        f = weakSelf.hitLabel.frame;
+        f.origin.x = -1 * direction * weakSelf.view.frame.size.width;
+        weakSelf.hitLabel.frame = f;
+    } completion:^(BOOL finished) {
+        UILabel *tmp = weakSelf.hitLabel2;
+        weakSelf.hitLabel2 = weakSelf.hitLabel;
+        weakSelf.hitLabel = tmp;
+        weakSelf.hitLabel2.hidden = YES;
+        weakSelf.hitLabel.userInteractionEnabled = YES;
+        self.hitCountLabel.text = [NSString stringWithFormat:@"%d/%d", _hitIndex + 1, [_hitWords count]];
+    }];
+    // [self updateHitLabel];
 }
 
 - (void)labelDoubleTapped:(UITapGestureRecognizer *)gestureRecognizer {
