@@ -42,6 +42,49 @@ bool ALGCanSpell(NSString *a, NSString *b) {
     return true;
 }
 
+// given the characters in weightedChars, which of a or b is more
+// valuable?
+NSComparisonResult ALGWeightedCompare(NSString *weightedChars, NSString *a, NSString *b) {
+    const char *aStr = [a cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *bStr = [b cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *wStr = [weightedChars cStringUsingEncoding:NSUTF8StringEncoding];
+    unsigned char a_t[26];
+    memset(a_t, 0, 26);
+    unsigned char b_t[26];
+    memset(b_t, 0, 26);
+    unsigned char w_t[26];
+    memset(w_t, 0, 26);
+    for (int ii = 0; ii < strlen(aStr); ++ii) {
+        unsigned char c = aStr[ii] - 'a';
+        a_t[c]++;
+    }
+    for (int ii = 0; ii < strlen(bStr); ++ii) {
+        unsigned char c = bStr[ii] - 'a';
+        b_t[c]++;
+    }
+    for (int ii = 0; ii < strlen(wStr); ++ii) {
+        unsigned char c = wStr[ii] - 'a';
+        w_t[c]++;
+    }
+    int aWeight = 0;
+    int bWeight = 0;
+    for (int ii = 0; ii < 26; ++ii) {
+        aWeight += MIN(a_t[ii], w_t[ii]);
+        bWeight += MIN(b_t[ii], w_t[ii]);
+    }
+    if (aWeight > bWeight) {
+        return NSOrderedAscending;
+    } else if (aWeight < bWeight) {
+        return NSOrderedDescending;
+    } else if ([a length] > [b length]) {
+        return NSOrderedAscending;
+    } else if ([a length] < [b length]) {
+        return NSOrderedDescending;
+    } else {
+        return NSOrderedSame;
+    }
+}
+
 NSArray *ALGLoadWordList(NSString *path) {
     NSError *error = nil;
     NSString *fileContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
@@ -320,21 +363,29 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
      * w = number of letters from searchString that are in value, factoring for
      * repeats.
      */
+    self.hitLabel.text = @"";
+    self.hitCountLabel.text = @"";
+    self.leftArrowImageView.hidden = YES;
+    self.rightArrowImageView.hidden = YES;
+    self.boardView.userInteractionEnabled = NO;
+    [self.activityIndicator startAnimating];
+
     NSLog(@"filtering selectedLetters: %@", self.boardView.selectedString);
+    NSString *compareString = [self.boardView.selectedString lowercaseString];
+    __weak ALGViewController *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSArray *sorted = [_hitWords sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            // calculate the weight of the two strings
-
-            if ([obj1 length] == [obj2 length]) {
-                return NSOrderedSame;
-            } else if ([obj1 length] > [obj2 length]) {
-                return NSOrderedAscending;
-            } else {
-                return NSOrderedDescending;
-            }
+            return ALGWeightedCompare(compareString, obj1, obj2);
         }];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"filtered: %d", [sorted count]);
+            _hitWords = sorted;
+            _hitIndex = 0;
+            [self.activityIndicator stopAnimating];
+            self.leftArrowImageView.hidden = NO;
+            self.rightArrowImageView.hidden = NO;
+            [weakSelf updateHitLabel];
+            self.boardView.userInteractionEnabled = YES;
         });
     });
 }
