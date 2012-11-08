@@ -1,5 +1,5 @@
 //
-//  ALGOverlayView.h
+//  ALGBoardView.h
 //  Pressletter
 //
 //  Created by Art Gillespie on 11/2/12.
@@ -9,10 +9,24 @@
 #import <UIKit/UIKit.h>
 
 @class ALGScreenshotReader;
+@class ALGBoardView;
 
-@interface ALGOverlayView : UIView
+@protocol ALGBoardViewDelegate <NSObject>
+
+@required
+
+- (void)boardViewDidChangeTileSelection:(ALGBoardView *)boardView;
+
+@end
+
+@interface ALGBoardView : UIView
 
 @property (nonatomic, strong) ALGScreenshotReader *screenshotReader;
 @property (nonatomic, strong) NSString *hitWord;
+@property (nonatomic, strong) UIImage *boardImage;
+// array of booleans indicating whether the tile is toggled
+@property (nonatomic, strong) NSMutableArray *selectedTiles;
+@property (nonatomic, weak) id<ALGBoardViewDelegate> delegate;
+@property (nonatomic, strong) NSString *selectedString;
 
 @end
