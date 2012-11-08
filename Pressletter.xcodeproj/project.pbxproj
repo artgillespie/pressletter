@@ -55,8 +55,8 @@
 		C8D86314164445F6001B5668 /* iPhone_5_2.png in Resources */ = {isa = PBXBuildFile; fileRef = C8D86311164445F6001B5668 /* iPhone_5_2.png */; };
 		C8D86315164445F6001B5668 /* iPhone_5_2.png in Resources */ = {isa = PBXBuildFile; fileRef = C8D86311164445F6001B5668 /* iPhone_5_2.png */; };
 		C8D863171644554E001B5668 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D863161644554E001B5668 /* AssetsLibrary.framework */; };
-		C8D8631E16445B94001B5668 /* ALGOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D8631D16445B94001B5668 /* ALGOverlayView.m */; };
-		C8D8631F16445B94001B5668 /* ALGOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D8631D16445B94001B5668 /* ALGOverlayView.m */; };
+		C8D8631E16445B94001B5668 /* ALGBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D8631D16445B94001B5668 /* ALGBoardView.m */; };
+		C8D8631F16445B94001B5668 /* ALGBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D8631D16445B94001B5668 /* ALGBoardView.m */; };
 		C8D8632016446430001B5668 /* MuseoSansRounded-700.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8D863011643BF0B001B5668 /* MuseoSansRounded-700.otf */; };
 		C8D8632316447264001B5668 /* dict_long_to_short.txt in Resources */ = {isa = PBXBuildFile; fileRef = C8D8632216447264001B5668 /* dict_long_to_short.txt */; };
 		C8D8632416447264001B5668 /* dict_long_to_short.txt in Resources */ = {isa = PBXBuildFile; fileRef = C8D8632216447264001B5668 /* dict_long_to_short.txt */; };
@@ -134,8 +134,8 @@
 		C8D86310164445F6001B5668 /* iPhone_5_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_5_1.png; sourceTree = "<group>"; };
 		C8D86311164445F6001B5668 /* iPhone_5_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iPhone_5_2.png; sourceTree = "<group>"; };
 		C8D863161644554E001B5668 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
-		C8D8631C16445B94001B5668 /* ALGOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALGOverlayView.h; sourceTree = "<group>"; };
-		C8D8631D16445B94001B5668 /* ALGOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALGOverlayView.m; sourceTree = "<group>"; };
+		C8D8631C16445B94001B5668 /* ALGBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALGBoardView.h; sourceTree = "<group>"; };
+		C8D8631D16445B94001B5668 /* ALGBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALGBoardView.m; sourceTree = "<group>"; };
 		C8D8632216447264001B5668 /* dict_long_to_short.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dict_long_to_short.txt; sourceTree = "<group>"; };
 		C8F10E201645EF6C0050FAE6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		C8F10E211645EF6C0050FAE6 /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
@@ -216,8 +216,8 @@
 				C8D862CA1643BDD7001B5668 /* ALGAppDelegate.m */,
 				C8D8630B1644261E001B5668 /* ALGImageUtilities.h */,
 				C8D8630C1644261E001B5668 /* ALGImageUtilities.m */,
-				C8D8631C16445B94001B5668 /* ALGOverlayView.h */,
-				C8D8631D16445B94001B5668 /* ALGOverlayView.m */,
+				C8D8631C16445B94001B5668 /* ALGBoardView.h */,
+				C8D8631D16445B94001B5668 /* ALGBoardView.m */,
 				C8D863061643C059001B5668 /* ALGScreenshotReader.h */,
 				C8D863071643C059001B5668 /* ALGScreenshotReader.m */,
 				C8D862D21643BDD7001B5668 /* ALGViewController.h */,
@@ -468,7 +468,7 @@
 				C8D862D41643BDD7001B5668 /* ALGViewController.m in Sources */,
 				C8D863081643C059001B5668 /* ALGScreenshotReader.m in Sources */,
 				C8D8630D1644261E001B5668 /* ALGImageUtilities.m in Sources */,
-				C8D8631E16445B94001B5668 /* ALGOverlayView.m in Sources */,
+				C8D8631E16445B94001B5668 /* ALGBoardView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -479,7 +479,7 @@
 				C8D862EC1643BDD7001B5668 /* PressletterTests.m in Sources */,
 				C8D863091643C059001B5668 /* ALGScreenshotReader.m in Sources */,
 				C8D8630E1644261E001B5668 /* ALGImageUtilities.m in Sources */,
-				C8D8631F16445B94001B5668 /* ALGOverlayView.m in Sources */,
+				C8D8631F16445B94001B5668 /* ALGBoardView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,7 +530,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Tapsquare, LLC";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 12;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -539,7 +539,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0E08F37D-3A33-4D28-915F-D40D32DC24E0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";

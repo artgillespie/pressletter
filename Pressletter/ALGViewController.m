@@ -8,12 +8,18 @@
 
 #import "ALGViewController.h"
 #import "ALGScreenshotReader.h"
-#import "ALGOverlayView.h"
+#import "ALGBoardView.h"
 
 #import <AssetsLibrary/AssetsLibrary.h>
 
 // can we spell a with non-repeating instances of the characters in b?
 bool ALGCanSpell(NSString *a, NSString *b) {
+    /*
+     * This is a pretty straightforward algorithm. We represent the English
+     * alphabet as a 26-item array and count the number of times a letter occurs
+     * in both the a and b string. Then, if any letter in a's array has a higher
+     * count than b, we know we can't spell a with the letters in b.
+     */
     const char *aStr = [a cStringUsingEncoding:NSUTF8StringEncoding];
     const char *bStr = [b cStringUsingEncoding:NSUTF8StringEncoding];
     unsigned char a_t[26];
@@ -55,6 +61,9 @@ NSString *ALGGetCachePath() {
     return cachePath;
 }
 
+/**
+ * Return the word list for the given board string if it's stored on disk.
+ */
 NSArray *ALGGetCachedHits(NSString *boardString) {
     NSString *cachePath = ALGGetCachePath();
     NSString *boardPath = [cachePath stringByAppendingPathComponent:[boardString stringByAppendingPathExtension:@"txt"]];
@@ -70,9 +79,8 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
     return [hits writeToFile:boardPath atomically:YES];
 }
 
-@interface ALGViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet ALGOverlayView *overlayView;
+@interface ALGViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ALGBoardViewDelegate>
+@property (weak, nonatomic) IBOutlet ALGBoardView *boardView;
 @property (weak, nonatomic) IBOutlet UILabel *hitLabel;
 @property (strong, nonatomic) UILabel *hitLabel2;
 @property (weak, nonatomic) IBOutlet UIButton *chooseButton;
@@ -88,7 +96,7 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
     __strong NSArray *_wordDictionary;
     __strong NSArray *_hitWords;
     NSInteger _hitIndex;
-    // for iPad
+    // for iPad - We have to present the image picker in a popover
     __strong UIPopoverController *_imagePickerPopover;
 }
 
@@ -115,6 +123,7 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
 
 - (void)setupHitLabel2 {
     // setup the 'back' hit label
+    // We have two UILabel instances to make the animation left and right work.
     UILabel *hitLabel2 = [[UILabel alloc] initWithFrame:self.hitLabel.frame];
     hitLabel2.userInteractionEnabled = YES;
     hitLabel2.contentMode = self.hitLabel.contentMode;
@@ -134,13 +143,14 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
     self.hitLabel2 = hitLabel2;
 }
 
+- (void)setupBoard {
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     UIImage *image = [[UIImage imageNamed:@"UIAlertSheetBlackCancelButton"] resizableImageWithCapInsets:UIEdgeInsetsMake(0.f, 13.f, 0.f, 13.f)];
     [self.chooseButton setBackgroundImage:image forState:UIControlStateNormal];
     [self.lastButton setBackgroundImage:image forState:UIControlStateNormal];
-    UIImage *helpImage = [UIImage imageNamed:@"HelpPlaceholder"];
-    self.imageView.image = helpImage;
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelTapped:)];
     [self.hitLabel addGestureRecognizer:tapRecognizer];
     UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelDoubleTapped:)];
@@ -153,6 +163,9 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
     self.rightArrowImageView.hidden = YES;
     [self setupDefaultView];
     [self setupHitLabel2];
+    [self setupBoard];
+    self.boardView.boardImage = [UIImage imageNamed:@"HelpPlaceholder"];
+    self.boardView.delegate = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -167,6 +180,7 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
         [self.defaultView removeFromSuperview];
         self.defaultView = nil;
     }];
+    [self.boardView setNeedsDisplay];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -176,14 +190,14 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
 
 - (void)readImage:(UIImage *)image {
     NSParameterAssert([NSThread isMainThread]);
-    self.overlayView.screenshotReader = nil;
+    self.boardView.screenshotReader = nil;
     self.hitLabel.text = @"";
     self.hitCountLabel.text = @"";
     self.leftArrowImageView.hidden = YES;
     self.rightArrowImageView.hidden = YES;
     [self.activityIndicator startAnimating];
     ALGScreenshotReader *reader = [[ALGScreenshotReader alloc] initWithImage:image];
-    self.imageView.image = reader.croppedImage;
+    self.boardView.boardImage = reader.croppedImage;
     __weak ALGViewController *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (NO == [reader read]) {
@@ -198,7 +212,7 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
         if (nil != wordList && 0 != [wordList count]) {
             // if we have a cached word list, just load it
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.overlayView.screenshotReader = reader;
+                self.boardView.screenshotReader = reader;
                 _hitWords = [NSArray arrayWithArray:wordList];
                 _hitIndex = 0;
                 [weakSelf updateHitLabel];
@@ -226,7 +240,7 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
                 hitCount++;
                 if (1 == hitCount) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        self.overlayView.screenshotReader = reader;
+                        self.boardView.screenshotReader = reader;
                         _hitWords = [NSArray arrayWithArray:hits];
                         _hitIndex = 0;
                         [weakSelf updateHitLabel];
@@ -236,7 +250,7 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
                     });
                 } else if (0 == hitCount % 10) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        self.overlayView.screenshotReader = reader;
+                        self.boardView.screenshotReader = reader;
                         _hitWords = [NSArray arrayWithArray:hits];
                         [weakSelf updateHitLabel];
                     });
@@ -244,7 +258,7 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
             }
         } // for (NSString *word in _wordDictionary)
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.overlayView.screenshotReader = reader;
+            self.boardView.screenshotReader = reader;
             _hitWords = [NSArray arrayWithArray:hits];
             [weakSelf updateHitLabel];
         });
@@ -298,6 +312,33 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
                          }];
 }
 
+#pragma mark - ALGBoardViewDelegate
+
+- (void)boardViewDidChangeTileSelection:(ALGBoardView *)boardView {
+    /*
+     * Weighting:
+     * w = number of letters from searchString that are in value, factoring for
+     * repeats.
+     */
+    NSLog(@"filtering selectedLetters: %@", self.boardView.selectedString);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *sorted = [_hitWords sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            // calculate the weight of the two strings
+
+            if ([obj1 length] == [obj2 length]) {
+                return NSOrderedSame;
+            } else if ([obj1 length] > [obj2 length]) {
+                return NSOrderedAscending;
+            } else {
+                return NSOrderedDescending;
+            }
+        }];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"filtered: %d", [sorted count]);
+        });
+    });
+}
+
 #pragma mark - UIImagePickerControllerDelegate
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -320,12 +361,11 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
     }
 }
 
-
 - (void)updateHitLabel {
     if (nil == _hitWords) {
         return;
     }
-    self.overlayView.hitWord = _hitWords[_hitIndex];
+    self.boardView.hitWord = _hitWords[_hitIndex];
     self.hitLabel.text = [_hitWords[_hitIndex] uppercaseString];
     self.hitCountLabel.text = [NSString stringWithFormat:@"%d/%d", _hitIndex + 1, [_hitWords count]];
 }
@@ -346,7 +386,7 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
         }
         direction = -1;
     }
-    self.overlayView.hitWord = _hitWords[_hitIndex];
+    self.boardView.hitWord = _hitWords[_hitIndex];
     CGRect f = self.hitLabel.frame;
     f.origin.x = direction * self.view.bounds.size.width;
     self.hitLabel2.frame = f;
