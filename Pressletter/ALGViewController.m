@@ -281,6 +281,9 @@ BOOL ALGCacheHits(NSString *boardString, NSArray *hits) {
             if (true == ALGCanSpell(word, compareString)) {
                 [hits addObject:word];
                 hitCount++;
+                if (hitCount >= 1000) {
+                    break;
+                }
                 if (1 == hitCount) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         self.boardView.screenshotReader = reader;

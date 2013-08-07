@@ -25,6 +25,7 @@
 @property (nonatomic, strong) NSString *hitWord;
 @property (nonatomic, strong) UIImage *boardImage;
 // array of booleans indicating whether the tile is toggled
+// TODO: [alg] why not a CFMutableBitVector?
 @property (nonatomic, strong) NSMutableArray *selectedTiles;
 @property (nonatomic, weak) id<ALGBoardViewDelegate> delegate;
 @property (nonatomic, strong) NSString *selectedString;

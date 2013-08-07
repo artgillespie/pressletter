@@ -45,7 +45,6 @@
 		C8D863021643BF0B001B5668 /* IMG_1384.PNG in Resources */ = {isa = PBXBuildFile; fileRef = C8D862FE1643BF0B001B5668 /* IMG_1384.PNG */; };
 		C8D863031643BF0B001B5668 /* IMG_1385.PNG in Resources */ = {isa = PBXBuildFile; fileRef = C8D862FF1643BF0B001B5668 /* IMG_1385.PNG */; };
 		C8D863041643BF0B001B5668 /* IMG_1386.PNG in Resources */ = {isa = PBXBuildFile; fileRef = C8D863001643BF0B001B5668 /* IMG_1386.PNG */; };
-		C8D863051643BF0B001B5668 /* MuseoSansRounded-700.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8D863011643BF0B001B5668 /* MuseoSansRounded-700.otf */; };
 		C8D863081643C059001B5668 /* ALGScreenshotReader.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D863071643C059001B5668 /* ALGScreenshotReader.m */; };
 		C8D863091643C059001B5668 /* ALGScreenshotReader.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D863071643C059001B5668 /* ALGScreenshotReader.m */; };
 		C8D8630A1643C61F001B5668 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D862BE1643BDD7001B5668 /* CoreGraphics.framework */; };
@@ -57,7 +56,6 @@
 		C8D863171644554E001B5668 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8D863161644554E001B5668 /* AssetsLibrary.framework */; };
 		C8D8631E16445B94001B5668 /* ALGBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D8631D16445B94001B5668 /* ALGBoardView.m */; };
 		C8D8631F16445B94001B5668 /* ALGBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8D8631D16445B94001B5668 /* ALGBoardView.m */; };
-		C8D8632016446430001B5668 /* MuseoSansRounded-700.otf in Resources */ = {isa = PBXBuildFile; fileRef = C8D863011643BF0B001B5668 /* MuseoSansRounded-700.otf */; };
 		C8D8632316447264001B5668 /* dict_long_to_short.txt in Resources */ = {isa = PBXBuildFile; fileRef = C8D8632216447264001B5668 /* dict_long_to_short.txt */; };
 		C8D8632416447264001B5668 /* dict_long_to_short.txt in Resources */ = {isa = PBXBuildFile; fileRef = C8D8632216447264001B5668 /* dict_long_to_short.txt */; };
 		C8F10E251645EF6C0050FAE6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C8F10E201645EF6C0050FAE6 /* Default-568h@2x.png */; };
@@ -126,7 +124,6 @@
 		C8D862FE1643BF0B001B5668 /* IMG_1384.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_1384.PNG; sourceTree = "<group>"; };
 		C8D862FF1643BF0B001B5668 /* IMG_1385.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_1385.PNG; sourceTree = "<group>"; };
 		C8D863001643BF0B001B5668 /* IMG_1386.PNG */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_1386.PNG; sourceTree = "<group>"; };
-		C8D863011643BF0B001B5668 /* MuseoSansRounded-700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSansRounded-700.otf"; sourceTree = "<group>"; };
 		C8D863061643C059001B5668 /* ALGScreenshotReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALGScreenshotReader.h; sourceTree = "<group>"; };
 		C8D863071643C059001B5668 /* ALGScreenshotReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALGScreenshotReader.m; sourceTree = "<group>"; };
 		C8D8630B1644261E001B5668 /* ALGImageUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALGImageUtilities.h; sourceTree = "<group>"; };
@@ -277,7 +274,6 @@
 				C8F10E411646F9F10050FAE6 /* iPhone4_Retro.png */,
 				C8D86310164445F6001B5668 /* iPhone_5_1.png */,
 				C8D86311164445F6001B5668 /* iPhone_5_2.png */,
-				C8D863011643BF0B001B5668 /* MuseoSansRounded-700.otf */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -386,7 +382,6 @@
 				C8D862C51643BDD7001B5668 /* InfoPlist.strings in Resources */,
 				C8D862D71643BDD7001B5668 /* ALGViewController.xib in Resources */,
 				C8D86314164445F6001B5668 /* iPhone_5_2.png in Resources */,
-				C8D8632016446430001B5668 /* MuseoSansRounded-700.otf in Resources */,
 				C8D8632316447264001B5668 /* dict_long_to_short.txt in Resources */,
 				C815FC0A1644890A000EFA3E /* UIAlertSheetBlackCancelButton@2x.png in Resources */,
 				C815FC0D1644954D000EFA3E /* HelpPlaceholder@2x.png in Resources */,
@@ -420,7 +415,6 @@
 				C8D863021643BF0B001B5668 /* IMG_1384.PNG in Resources */,
 				C8D863031643BF0B001B5668 /* IMG_1385.PNG in Resources */,
 				C8D863041643BF0B001B5668 /* IMG_1386.PNG in Resources */,
-				C8D863051643BF0B001B5668 /* MuseoSansRounded-700.otf in Resources */,
 				C8D86313164445F6001B5668 /* iPhone_5_1.png in Resources */,
 				C8D86315164445F6001B5668 /* iPhone_5_2.png in Resources */,
 				C8D8632416447264001B5668 /* dict_long_to_short.txt in Resources */,
