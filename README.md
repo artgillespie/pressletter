@@ -9,4 +9,4 @@ Pressletter was written and tested against the 1.0 release of Letterpress. It ap
 
 ### Caveat
 
-This isn't production-ready code; I wrote it as a fun project and I only toyed with the idea of releasing it very briefly. There are probably same bugs and some O(n^3) algorithms. Oh, and if you've ever played me in Letterpress, I promise I never used this against you. Honest. ;-)
+This isn't production-ready code; I wrote it as a fun project and I only toyed with the idea of releasing it on the App Store very briefly (early solvers on the App Store made you enter the board manually) There are probably some bugs and some O(n^3) algorithms. Oh, and if you've ever played me in Letterpress, I promise I never used this against you. Honest. ;-)
