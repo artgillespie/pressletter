@@ -7,4 +7,6 @@ To use Pressletter, simply select a Letterpress screenshot from your device's ca
 
 Pressletter was written and tested against the 1.0 release of Letterpress. It appears to work with the current release 1.4 (though the dictionary may be out of sync with the shipping version of Letterpress)
 
-Oh, and if you've ever played me in Letterpress, I promise I never used this against you. ;-)
+### Caveat
+
+This isn't production-ready code; I wrote it as a fun project and I only toyed with the idea of releasing it very briefly. There are probably same bugs and some O(n^3) algorithms. Oh, and if you've ever played me in Letterpress, I promise I never used this against you. Honest. ;-)
